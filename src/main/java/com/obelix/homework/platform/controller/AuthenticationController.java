@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.controller;
 
+import com.obelix.homework.platform.Dto.UserDto;
 import com.obelix.homework.platform.service.UserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,33 +14,27 @@ public class AuthenticationController {
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    //Този метод трябва да връща HTML кода за логин формата
+    // This method should return the HTML code for the login form
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
-    //Този метод трябва да връща HTML кода за логин формата
+    // This method should return the HTML code for the registration form
     @GetMapping("/register")
     public String register() {
         return "register";
     }
 
-    /*
-        В тялото на request-ите за тези два метода трябва да се съдържа информация за потребитяла
-        {
-            "username":"usr",
-            "password":"pswd"
-         }
-     */
+    // This method will handle login requests. The body of the request should contain the user's credentials (username, password).
     @PostMapping("/login")
     public void login(@RequestBody UserModel userModel) {
-        userDetailsService.loadUserByUsername(userModel.getUsername());
+        userDetailsService.loadUserByUsername(userModel.getUsername());  // Loads user details by username
     }
 
+    // This method will handle registration requests. The body of the request should contain user details (username, password).
     @PostMapping("/register")
-    public void register(@RequestBody UserModel user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userDetailsService.registerUser(user);
+    public void register(@RequestBody UserDto user) {
+        userDetailsService.registerUser(user);  // Registers the user with the provided user details
     }
 }

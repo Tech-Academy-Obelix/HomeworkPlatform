@@ -6,17 +6,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
     @GetMapping("/")
-    public String home() {
+    public String index() {
         return "Hello World";
+    }
+
+    @GetMapping("/student")
+    public String home() {
+        return "Hello Student";
     }
 
     @GetMapping("/teacher")
     public String teacher() {
         return "Hello Teacher";
-    }
-
-    @GetMapping("/admin")
-    public String admin() {
-        return "Hello Admin";
     }
 }
