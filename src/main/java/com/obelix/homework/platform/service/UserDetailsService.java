@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
     private final UserDetailsRepo userDetailsRepo;  // Injects the repository for user details to interact with the database.
-    private final RoleIdInviteCodeService inviteCodeService;  // Injects the service for handling invite codes.
+    private final InviteCodeService inviteCodeService;  // Injects the service for handling invite codes.
     private final PasswordEncoder passwordEncoder;  // Injects the password encoder to encode passwords.
 
     // Loads a user by their username. Throws an exception if the user is not found.
@@ -32,14 +32,8 @@ public class UserDetailsService implements org.springframework.security.core.use
     // Registers a new user by using the provided user details.
     public void registerUser(UserDto user) {
         throwIfUsernameExists(user.getUsername());  // Checks if the username already exists, throws an exception if it does.
-        System.out.println(user.getUsername());  // Prints the username to the console (probably for debugging).
         InviteCode inviteCode = inviteCodeService.getInviteCodeById(user.getInviteCode());  // Fetches the invite code using the provided invite code ID.
-        userDetailsRepo.save(UserModel.builder()  // Saves a new user in the repository.
-                .username(user.getUsername())  // Sets the username for the new user.
-                .password(passwordEncoder.encode(inviteCode.toString()))  // Encodes the invite code as the password (this is likely not the intended behavior, as passwords should be different).
-                .email(inviteCode.getAssociatedEmail())  // Sets the user's email based on the invite code.
-                .role(inviteCode.getRole())  // Sets the user's role based on the invite code.
-                .build());
+        userDetailsRepo.save(buildUser(inviteCode, user.getUsername()));
         inviteCodeService.removeInviteCode(inviteCode);  // Removes the invite code after it’s used for registration.
     }
 
@@ -63,5 +57,14 @@ public class UserDetailsService implements org.springframework.security.core.use
         if (existsByUsername(username)) {  // Checks if the username exists in the database.
             throw new UsernameExistsException(username);  // Throws a custom exception if the username exists.
         }
+    }
+
+    private UserModel buildUser(InviteCode inviteCode, String username) {
+        return UserModel.builder()  // Saves a new user in the repository.
+                .username(username)  // Sets the username for the new user.
+                .password(passwordEncoder.encode(inviteCode.toString()))  // Encodes the invite code as the password (this is likely not the intended behavior, as passwords should be different).
+                .email(inviteCode.getAssociatedEmail())  // Sets the user's email based on the invite code.
+                .role(inviteCode.getRole())  // Sets the user's role based on the invite code.
+                .build();
     }
 }

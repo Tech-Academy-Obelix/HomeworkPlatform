@@ -10,17 +10,17 @@ import java.util.UUID;
 
 @Service  // Marks this class as a service component for Spring's dependency injection.
 @RequiredArgsConstructor  // Generates a constructor for the final fields of this class.
-public class RoleIdInviteCodeService {
+public class InviteCodeService {
 
     private final InviteCodeRepo inviteCodeRepo;  // Injects the InviteCode repository to interact with the database.
 
     // Grants an invite code for a specific role and email. Returns the UUID of the created invite code.
-    public UUID grantInviteCode(Role role, String email) {
+    public String grantInviteCode(Role role, String email) {
         // Saves the invite code entity with the specified role and associated email, and returns its UUID.
         return inviteCodeRepo.save(InviteCode.builder()
                 .role(role.toString())  // Sets the role of the invite code (converted to String).
                 .associatedEmail(email)  // Sets the associated email.
-                .build()).getId();  // Returns the ID of the saved invite code.
+                .build()).getId().toString();  // Returns the ID of the saved invite code.
     }
 
     // Retrieves an invite code by its UUID.
