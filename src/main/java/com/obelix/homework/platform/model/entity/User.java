@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model;
+package com.obelix.homework.platform.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,16 +19,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserModel implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
-    String username;
-    String password;
-    String email;
-    String firstName;
-    String lastName;
-    String role;
+    private UUID id;
+    private String username;
+    private String password;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private String role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model;
+package com.obelix.homework.platform.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

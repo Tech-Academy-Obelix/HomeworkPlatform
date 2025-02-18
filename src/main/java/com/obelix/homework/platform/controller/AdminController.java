@@ -1,7 +1,6 @@
 package com.obelix.homework.platform.controller;
 
-import com.obelix.homework.platform.Dto.InviteCodeDto;
-import com.obelix.homework.platform.role.Role;
+import com.obelix.homework.platform.model.dto.InviteCodeDto;
 import com.obelix.homework.platform.service.InviteCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,7 @@ public class AdminController {
     public String admin(@RequestBody InviteCodeDto inviteCodeDto) {
         // Calls the service to grant an invite code based on the role and email, then returns the result as a string.
         return inviteCodeService.grantInviteCode(
-                Role.fromString(inviteCodeDto.getRoleName()),
+                inviteCodeDto.getRoleName(),
                 inviteCodeDto.getEmailAssociated()
         );
     }

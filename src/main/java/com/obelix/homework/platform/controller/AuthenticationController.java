@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.controller;
 
-import com.obelix.homework.platform.Dto.UserDto;
+import com.obelix.homework.platform.model.dto.UserDto;
 import com.obelix.homework.platform.service.UserDetailsService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.bind.annotation.*;
 
-import com.obelix.homework.platform.model.UserModel;
+import com.obelix.homework.platform.model.entity.User;
 
 import java.io.IOException;
 
@@ -31,7 +31,7 @@ public class AuthenticationController {
     private final AuthenticationFailureHandler failureHandler;
 
     @PostMapping("/login")
-    public String login(@RequestBody UserModel user, HttpServletRequest request, HttpServletResponse response) throws IOException,    ServletException {
+    public String login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException,    ServletException {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername(), passwordEncoder.encode(user.getPassword()));
         try {
