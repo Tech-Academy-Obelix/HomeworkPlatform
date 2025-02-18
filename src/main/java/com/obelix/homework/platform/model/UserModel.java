@@ -26,6 +26,8 @@ public class UserModel implements UserDetails {
     String username;
     String password;
     String email;
+    String firstName;
+    String lastName;
     String role;
 
     @Override
