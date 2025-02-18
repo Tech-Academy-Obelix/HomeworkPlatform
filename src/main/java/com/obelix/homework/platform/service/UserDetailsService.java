@@ -7,6 +7,8 @@ import com.obelix.homework.platform.model.entity.User;
 import com.obelix.homework.platform.repo.UserDetailsRepo;
 import com.obelix.homework.platform.role.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,20 @@ public class UserDetailsService implements org.springframework.security.core.use
         InviteCode inviteCode = inviteCodeService.getInviteCodeById(user.getInviteCode());  // Fetches the invite code using the provided invite code ID.
         userDetailsRepo.save(buildUser(inviteCode, user.getUsername()));
         inviteCodeService.removeInviteCode(inviteCode);  // Removes the invite code after it’s used for registration.
+    }
+
+    public User getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            Object principal = authentication.getPrincipal();
+
+            if (principal instanceof User) {
+                return (User) principal; // Cast to your User class (if using custom user details)
+            }
+        }
+
+        return null; // If no authentication is present
     }
 
     // Checks if a username already exists in the repository.
