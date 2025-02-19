@@ -15,11 +15,11 @@
 ### Admin
 - /admin (GET) - The default url an authenticated admin is redirect to
 - /admin/invite-code (POST) - Page for creating an invitation code, used for user creation
-	Expects an invitation code dto:
-		{
+  Expects an invitation code dto:
+'''		{
 			"roleName": enum("student", "teacher", "admin"),
 			"associatedEmail": email
-		}
+		}'''
 
 ### Student:
 - /student (GET) - The default url an authenticated student is redirected to
