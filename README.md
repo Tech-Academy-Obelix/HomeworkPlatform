@@ -38,12 +38,14 @@
 		}
   ```
 - /student/assignments/bulks (POST) - Submitting bulks assignments
-	Expects list of assignment dto's
+  Expects list of assignment dto's
+  ```json
 		{
 			{"id":UUID, "solution":solution},
 			{"id":UUID, "solution":solution},
 			{"id":UUID, "solution":solution},
 		}
+  ```
 - /student/submitted-assignments (GET) - Page for all submitted homework assignments
 - /student/submitted-assignments/id (GET) - Returns only the submitted assignment with the specified id
 - /student/grades (GET) - Page for the grades of the student
