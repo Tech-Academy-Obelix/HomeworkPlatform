@@ -48,6 +48,5 @@ public class TeacherController {
         return teacherService.getSubmittedAssignment(id);
     }
 
-
 }
 
