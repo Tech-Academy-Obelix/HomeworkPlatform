@@ -3,8 +3,6 @@ package com.obelix.homework.platform.controller;
 import com.obelix.homework.platform.model.dto.UserDto;
 import com.obelix.homework.platform.service.UserDetailsService;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,16 +29,16 @@ public class AuthenticationController {
     private final AuthenticationFailureHandler failureHandler;
 
     @PostMapping("/login")
-    public String login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) throws IOException,    ServletException {
+    public String login(@RequestBody User user) throws IOException,    ServletException {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername(), passwordEncoder.encode(user.getPassword()));
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            successHandler.onAuthenticationSuccess(request, response, authentication);
-            return "redirect:/";
+            successHandler.onAuthenticationSuccess(null, null, authentication);
+            return "redirect:/" + user.;
         } catch (AuthenticationException ex) {
-            failureHandler.onAuthenticationFailure(request, response, ex);
+            failureHandler.onAuthenticationFailure(null, null, ex);
             return "login";
         }
     }

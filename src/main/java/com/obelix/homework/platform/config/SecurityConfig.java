@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -34,7 +35,10 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
-                .formLogin(form -> form.loginPage("/login").permitAll())
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .successHandler(authenticationSuccessHandler())
+                        .permitAll())
                 .build();
     }
 
@@ -54,7 +58,16 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (_, response, _) -> response.sendRedirect("/home");
+        return (_, response, authentication) -> {
+            switch (authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElseThrow(IllegalAccessError::new)) {
+                case "ROLE_STUDENT" -> response.sendRedirect("/student");
+                case "ROLE_TEACHER" -> response.sendRedirect("/teacher");
+                case "ROLE_ADMIN" -> response.sendRedirect("/admin");
+            }
+        };
     }
 
     @Bean

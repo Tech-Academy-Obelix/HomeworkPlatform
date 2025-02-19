@@ -1,9 +1,6 @@
 package com.obelix.homework.platform.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,12 +25,16 @@ public class HomeworkAssignment {
     private Date assignmentDate;
     private Date dueDate;
 
+    @ManyToOne
+    private Subject subject;
+
     public HomeworkAssignment(HomeworkAssignment homeworkAssignment) {
-        this.id = homeworkAssignment.getId();
-        this.assignmentName = homeworkAssignment.getAssignmentName();
-        this.assignmentDescription = homeworkAssignment.getAssignmentDescription();
-        this.assignmentDate = homeworkAssignment.getAssignmentDate();
-        this.dueDate = homeworkAssignment.getDueDate();
+        id = UUID.randomUUID();
+        assignmentName = homeworkAssignment.getAssignmentName();
+        assignmentDescription = homeworkAssignment.getAssignmentDescription();
+        assignmentDate = homeworkAssignment.getAssignmentDate();
+        dueDate = homeworkAssignment.getDueDate();
+        subject = homeworkAssignment.getSubject();
     }
 
 }

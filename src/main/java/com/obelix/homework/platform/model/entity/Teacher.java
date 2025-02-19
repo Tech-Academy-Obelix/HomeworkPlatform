@@ -13,4 +13,8 @@ public class Teacher extends User {
 
     @OneToMany
     private List<Course> courses;
+
+    @OneToMany
+    private List<Subject> subjects;
+
 }

@@ -1,7 +1,9 @@
 package com.obelix.homework.platform.controller;
 
 import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.entity.Grade;
 import com.obelix.homework.platform.model.entity.HomeworkAssignment;
+import com.obelix.homework.platform.model.entity.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +28,22 @@ public class StudentController {
     }
 
     @PostMapping("/assignments/{id}")
-    public HomeworkAssignment submitAssignment(@PathVariable UUID id, @RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
+    public SubmittedHomeworkAssignment submitAssignment(@PathVariable UUID id, @RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
         return studentService.submitAssignment(id, submittedHomeworkAssignmentDto);
+    }
+
+    @GetMapping("/submitted-assignments")
+    public List<SubmittedHomeworkAssignment> getSubmittedAssignments() {
+        return studentService.getSubmittedAssignments();
+    }
+
+    @GetMapping("/submitted-assignments/{id}")
+    public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID id) {
+        return studentService.getSubmittedAssignment(id);
+    }
+
+    @PostMapping("/grades")
+    public List<Grade> getGrades() {
+        return studentService.getGrades();
     }
 }
