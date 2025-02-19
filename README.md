@@ -1,14 +1,14 @@
 # Endpoints
 ### Authentication
-- login (GET) - Page for login panel
-- login (POST) - Expects form-data containig username and password
-- register (GET) - Page for register panel
-- register (POST) - Page for user registration
+- /login (GET) - Page for login panel
+- /login (POST) - Expects form-data containig username and password
+- /register (GET) - Page for register panel
+- /register (POST) - Page for user registration
   Expects user dto:
   ```json
 	{
 		"username":username,
-  		"firstName":first-name,
+  	"firstName":first-name,
 		"lastName":last-name,
 		"inviteCode":invitation-code
 	}
