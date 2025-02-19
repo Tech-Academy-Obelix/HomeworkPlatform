@@ -30,9 +30,9 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register").permitAll()
-                        .requestMatchers("/student/**").hasAnyAuthority(Role.STUDENT.toString())
-                        .requestMatchers("/teacher/**").hasAnyAuthority(Role.TEACHER.toString())
-                        .requestMatchers("/admin/**").hasAnyAuthority(Role.ADMIN.toString())
+                        .requestMatchers("/student/**").hasAnyAuthority(Role.ROLE_STUDENT.toString())
+                        .requestMatchers("/teacher/**").hasAnyAuthority(Role.ROLE_TEACHER.toString())
+                        .requestMatchers("/admin/**").hasAnyAuthority(Role.ROLE_ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

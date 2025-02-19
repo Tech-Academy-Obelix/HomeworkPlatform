@@ -2,14 +2,13 @@ package com.obelix.homework.platform.role;
 
 import com.obelix.homework.platform.exception.NoSuchRoleException;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum Role {
-    STUDENT("ROLE_STUDENT"),
-    TEACHER("ROLE_TEACHER"),
-    ADMIN("ROLE_ADMIN"),
-    OWNER("ROLE_OWNER");
+    ROLE_STUDENT("ROLE_STUDENT"),
+    ROLE_TEACHER("ROLE_TEACHER"),
+    ROLE_ADMIN("ROLE_ADMIN"),
+    ROLE_OWNER("ROLE_OWNER");
 
     private final String roleAsString;
 
@@ -20,18 +19,18 @@ public enum Role {
 
     public static Role fromString(String roleAsString) {
         return switch (roleAsString) {
-            case "student" -> STUDENT;
-            case "teacher" -> TEACHER;
-            case "admin" -> ADMIN;
+            case "student" -> ROLE_STUDENT;
+            case "teacher" -> ROLE_TEACHER;
+            case "admin" -> ROLE_ADMIN;
             case null, default -> throw new NoSuchRoleException(roleAsString);
         };
     }
 
     public static String toSimpleString(Role role) {
         return switch (role) {
-            case STUDENT -> "student";
-            case TEACHER -> "teacher";
-            case ADMIN -> "admin";
+            case ROLE_STUDENT -> "student";
+            case ROLE_TEACHER -> "teacher";
+            case ROLE_ADMIN -> "admin";
             case null, default -> throw new NoSuchRoleException("null");
 
         };

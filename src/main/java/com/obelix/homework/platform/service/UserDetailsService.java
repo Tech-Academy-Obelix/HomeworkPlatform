@@ -64,7 +64,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         userDetailsRepo.save(User.builder()  // Saves a default admin user to the repository.
                 .username("admin")  // Default username for the admin.
                 .password(passwordEncoder.encode("admin"))  // Default password for the admin, encoded.
-                .role(Role.ADMIN)  // Sets the role to ADMIN.
+                .role(Role.ROLE_ADMIN)  // Sets the role to ADMIN.
                 .build());
     }
 
