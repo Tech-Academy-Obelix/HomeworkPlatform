@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public class UserDto {
+public class RegisterDto {
     String username;
     String firstName;
     String lastName;

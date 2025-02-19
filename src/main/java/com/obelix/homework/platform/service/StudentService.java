@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StudentService {
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
     private final HomeworkAssignmentRepo homeworkAssignmentRepo;
     private final SubmittedHomeworkAssignmentRepo submittedHomeworkAssignmentRepo;
     private Student student;
@@ -58,7 +58,7 @@ public class StudentService {
 
     @PostConstruct
     public void init() {
-        student = (Student) userDetailsService.getLoggedInUser();
+        student = (Student) userService.getLoggedInUser();
     }
 
 
