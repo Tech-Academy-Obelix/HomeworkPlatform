@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.entity.users;
+package com.obelix.homework.platform.model.entity.user;
 
 import jakarta.persistence.*;
 import lombok.*;

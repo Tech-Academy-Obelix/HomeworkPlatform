@@ -1,6 +1,6 @@
-package com.obelix.homework.platform.config;
+package com.obelix.homework.platform.config.mapper;
 
-import com.obelix.homework.platform.config.converter.DtoToHomeworkAssignmentConverter;
+import com.obelix.homework.platform.config.mapper.converter.DtoToHomeworkAssignmentConverter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

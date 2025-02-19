@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.config;
+package com.obelix.homework.platform.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

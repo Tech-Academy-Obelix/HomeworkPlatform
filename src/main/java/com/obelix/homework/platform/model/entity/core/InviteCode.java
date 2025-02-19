@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.model.entity.core;
 
-import com.obelix.homework.platform.role.Role;
+import com.obelix.homework.platform.config.security.role.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

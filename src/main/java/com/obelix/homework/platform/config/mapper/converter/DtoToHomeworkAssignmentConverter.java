@@ -1,5 +1,4 @@
-package com.obelix.homework.platform.config.converter;
-
+package com.obelix.homework.platform.config.mapper.converter;
 
 import com.obelix.homework.platform.model.dto.HomeworkAssingmentDto;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
@@ -9,7 +8,6 @@ import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.util.Date;
 
 @Component

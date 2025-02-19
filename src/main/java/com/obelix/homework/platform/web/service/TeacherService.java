@@ -1,11 +1,10 @@
-package com.obelix.homework.platform.service;
+package com.obelix.homework.platform.web.service;
 
 import com.obelix.homework.platform.model.dto.CourseDto;
 import com.obelix.homework.platform.model.dto.HomeworkAssingmentDto;
 import com.obelix.homework.platform.model.entity.domain.Course;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
-import com.obelix.homework.platform.model.entity.users.Teacher;
 import com.obelix.homework.platform.repo.CourseRepo;
 import com.obelix.homework.platform.repo.HomeworkAssignmentRepo;
 import com.obelix.homework.platform.repo.SubmittedHomeworkAssignmentRepo;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

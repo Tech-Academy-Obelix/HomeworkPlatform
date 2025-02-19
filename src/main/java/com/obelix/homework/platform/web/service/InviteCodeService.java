@@ -1,8 +1,8 @@
-package com.obelix.homework.platform.service;
+package com.obelix.homework.platform.web.service;
 
 import com.obelix.homework.platform.model.entity.core.InviteCode;
 import com.obelix.homework.platform.repo.InviteCodeRepo;
-import com.obelix.homework.platform.role.Role;
+import com.obelix.homework.platform.config.security.role.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

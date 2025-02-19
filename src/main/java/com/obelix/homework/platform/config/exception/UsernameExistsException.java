@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.exception;
+package com.obelix.homework.platform.config.exception;
 
 import java.io.Serial;
 

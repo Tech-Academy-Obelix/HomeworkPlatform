@@ -1,15 +1,15 @@
-package com.obelix.homework.platform.controller;
+package com.obelix.homework.platform.web.controller;
 
-import com.obelix.homework.platform.config.JwtUtils;
+import com.obelix.homework.platform.config.security.JwtUtils;
 import com.obelix.homework.platform.model.dto.RegisterDto;
-import com.obelix.homework.platform.role.Role;
-import com.obelix.homework.platform.service.UserService;
+import com.obelix.homework.platform.config.security.role.Role;
+import com.obelix.homework.platform.web.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import com.obelix.homework.platform.model.entity.users.User;
+import com.obelix.homework.platform.model.entity.user.User;
 
 @RestController
 @RequiredArgsConstructor

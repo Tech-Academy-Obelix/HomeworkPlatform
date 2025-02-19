@@ -1,6 +1,6 @@
-package com.obelix.homework.platform.role;
+package com.obelix.homework.platform.config.security.role;
 
-import com.obelix.homework.platform.exception.NoSuchRoleException;
+import com.obelix.homework.platform.config.exception.NoSuchRoleException;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

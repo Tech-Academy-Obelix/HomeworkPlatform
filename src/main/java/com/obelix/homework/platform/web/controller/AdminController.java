@@ -1,8 +1,8 @@
-package com.obelix.homework.platform.controller;
+package com.obelix.homework.platform.web.controller;
 
 import com.obelix.homework.platform.model.dto.InviteCodeDto;
-import com.obelix.homework.platform.role.Role;
-import com.obelix.homework.platform.service.InviteCodeService;
+import com.obelix.homework.platform.config.security.role.Role;
+import com.obelix.homework.platform.web.service.InviteCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
