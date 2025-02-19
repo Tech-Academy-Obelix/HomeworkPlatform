@@ -47,7 +47,5 @@ public class TeacherController {
     public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID id) {
         return teacherService.getSubmittedAssignment(id);
     }
-
-
 }
 

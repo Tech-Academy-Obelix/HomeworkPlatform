@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.controller;
 
-import com.obelix.homework.platform.config.JwtUtils;
+import com.obelix.homework.platform.config.security.JwtUtils;
 import com.obelix.homework.platform.model.dto.RegisterDto;
 import com.obelix.homework.platform.role.Role;
 import com.obelix.homework.platform.service.UserService;

@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.config;
+package com.obelix.homework.platform.config.security;
 
 import com.obelix.homework.platform.service.UserService;
 import jakarta.servlet.FilterChain;

@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.config;
+package com.obelix.homework.platform.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
