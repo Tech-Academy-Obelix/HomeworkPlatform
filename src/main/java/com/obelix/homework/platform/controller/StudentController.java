@@ -27,9 +27,14 @@ public class StudentController {
         return studentService.getAssignment(id);
     }
 
-    @PostMapping("/assignments/{id}")
-    public SubmittedHomeworkAssignment submitAssignment(@PathVariable UUID id, @RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
-        return studentService.submitAssignment(id, submittedHomeworkAssignmentDto);
+    @PostMapping("/assignments")
+    public SubmittedHomeworkAssignment submitAssignment(@RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
+        return studentService.submitAssignment(submittedHomeworkAssignmentDto);
+    }
+
+    @PostMapping("/assignments/bulk")
+    public List<SubmittedHomeworkAssignment> submitBulkAssignments(@RequestBody List<SubmittedHomeworkAssignmentDto> submittedHomeworkAssignmentDtos) {
+        return studentService.submitBulkAssignments(submittedHomeworkAssignmentDtos);
     }
 
     @GetMapping("/submitted-assignments")
@@ -42,7 +47,7 @@ public class StudentController {
         return studentService.getSubmittedAssignment(id);
     }
 
-    @PostMapping("/grades")
+    @GetMapping("/grades")
     public List<Grade> getGrades() {
         return studentService.getGrades();
     }

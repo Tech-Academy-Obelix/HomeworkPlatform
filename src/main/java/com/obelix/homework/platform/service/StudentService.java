@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,11 +31,17 @@ public class StudentService {
         return homeworkAssignmentRepo.getHomeworkAssignmentById(id);
     }
 
-    public SubmittedHomeworkAssignment submitAssignment(UUID id, SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
+    public SubmittedHomeworkAssignment submitAssignment(SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
         return submittedHomeworkAssignmentRepo.save(new SubmittedHomeworkAssignment(
-                homeworkAssignmentRepo.getHomeworkAssignmentById(id),
+                homeworkAssignmentRepo.getHomeworkAssignmentById(submittedHomeworkAssignmentDto.getId()),
                 submittedHomeworkAssignmentDto
         ));
+    }
+
+    public List<SubmittedHomeworkAssignment> submitBulkAssignments(List<SubmittedHomeworkAssignmentDto> submittedHomeworkAssignmentDtos) {
+        return submittedHomeworkAssignmentDtos.stream()
+                .map(this::submitAssignment) // For each DTO, call submitAssignment and map to a Saved Assignment
+                .collect(Collectors.toList()); // Collect the results into a List
     }
 
     public List<SubmittedHomeworkAssignment> getSubmittedAssignments() {
@@ -53,4 +60,6 @@ public class StudentService {
     public void init() {
         student = (Student) userDetailsService.getLoggedInUser();
     }
+
+
 }
