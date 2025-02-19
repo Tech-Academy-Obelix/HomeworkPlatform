@@ -1,7 +1,17 @@
 # Endpoints
+
+### !!!Every endpoint except /login and /register require the user to be authenticated with credentials and JWT token!!!
+
 ### Authentication
 - /login (GET) - Page for login panel
-- /login (POST) - Expects form-data containig username and password
+- /login (POST)
+  Expects username and password and returns a JWT token
+  ```json
+	{
+		"roleName": enum("student", "teacher", "admin"),
+		"associatedEmail": email
+	}
+  ```
 - /register (GET) - Page for register panel
 - /register (POST) - Page for user registration
   Expects user dto:
