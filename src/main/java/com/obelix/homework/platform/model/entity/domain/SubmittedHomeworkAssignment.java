@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.entity;
+package com.obelix.homework.platform.model.entity.domain;
 
 import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
 import jakarta.persistence.*;

@@ -1,5 +1,7 @@
-package com.obelix.homework.platform.model.entity;
+package com.obelix.homework.platform.model.entity.users;
 
+import com.obelix.homework.platform.model.entity.domain.Course;
+import com.obelix.homework.platform.model.entity.domain.Subject;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;

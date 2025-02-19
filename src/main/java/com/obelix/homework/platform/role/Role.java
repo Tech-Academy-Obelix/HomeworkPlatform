@@ -26,4 +26,14 @@ public enum Role {
             case null, default -> throw new NoSuchRoleException(roleAsString);
         };
     }
+
+    public static String toSimpleString(Role role) {
+        return switch (role) {
+            case STUDENT -> "student";
+            case TEACHER -> "teacher";
+            case ADMIN -> "admin";
+            case null, default -> throw new NoSuchRoleException("null");
+
+        };
+    }
 }

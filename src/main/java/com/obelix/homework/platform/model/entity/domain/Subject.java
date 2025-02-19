@@ -1,5 +1,6 @@
-package com.obelix.homework.platform.model.entity;
+package com.obelix.homework.platform.model.entity.domain;
 
+import com.obelix.homework.platform.model.entity.users.Teacher;
 import jakarta.persistence.*;
 
 import java.util.UUID;

@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.repo;
 
 
-import com.obelix.homework.platform.model.entity.User;
+import com.obelix.homework.platform.model.entity.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

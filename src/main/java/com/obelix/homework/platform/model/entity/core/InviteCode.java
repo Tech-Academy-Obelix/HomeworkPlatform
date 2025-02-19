@@ -1,9 +1,7 @@
-package com.obelix.homework.platform.model.entity;
+package com.obelix.homework.platform.model.entity.core;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.obelix.homework.platform.role.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +29,8 @@ public class InviteCode {
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
 
-    String role;
+    @Enumerated(EnumType.STRING)
+    Role role;
     String associatedEmail;
 
     @Override

@@ -1,9 +1,7 @@
-package com.obelix.homework.platform.model.entity;
+package com.obelix.homework.platform.model.entity.users;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.obelix.homework.platform.role.Role;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,10 +26,12 @@ public class User implements UserDetails {
     private String email;
     private String firstName;
     private String lastName;
-    private String role;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.toString()));
     }
 }

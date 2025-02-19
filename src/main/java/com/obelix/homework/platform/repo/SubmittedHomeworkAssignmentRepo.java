@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.repo;
 
-import com.obelix.homework.platform.model.entity.SubmittedHomeworkAssignment;
+import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;

@@ -1,9 +1,9 @@
 package com.obelix.homework.platform.controller;
 
 import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
-import com.obelix.homework.platform.model.entity.Grade;
-import com.obelix.homework.platform.model.entity.HomeworkAssignment;
-import com.obelix.homework.platform.model.entity.SubmittedHomeworkAssignment;
+import com.obelix.homework.platform.model.entity.domain.Grade;
+import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
+import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

@@ -2,8 +2,8 @@ package com.obelix.homework.platform.service;
 
 import com.obelix.homework.platform.model.dto.UserDto;
 import com.obelix.homework.platform.exception.UsernameExistsException;
-import com.obelix.homework.platform.model.entity.InviteCode;
-import com.obelix.homework.platform.model.entity.User;
+import com.obelix.homework.platform.model.entity.core.InviteCode;
+import com.obelix.homework.platform.model.entity.users.User;
 import com.obelix.homework.platform.repo.UserDetailsRepo;
 import com.obelix.homework.platform.role.Role;
 import lombok.RequiredArgsConstructor;
@@ -64,7 +64,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         userDetailsRepo.save(User.builder()  // Saves a default admin user to the repository.
                 .username("admin")  // Default username for the admin.
                 .password(passwordEncoder.encode("admin"))  // Default password for the admin, encoded.
-                .role(Role.ADMIN.toString())  // Sets the role to ADMIN.
+                .role(Role.ADMIN)  // Sets the role to ADMIN.
                 .build());
     }
 

@@ -1,8 +1,9 @@
-package com.obelix.homework.platform.model.entity;
+package com.obelix.homework.platform.model.entity.domain;
 
+import com.obelix.homework.platform.model.entity.users.Student;
+import com.obelix.homework.platform.model.entity.users.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
-import org.hibernate.sql.ast.tree.update.Assignment;
 
 import java.util.List;
 import java.util.UUID;
