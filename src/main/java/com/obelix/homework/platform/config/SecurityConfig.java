@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -58,16 +59,11 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return (_, response, authentication) -> {
-            switch (authentication.getAuthorities().stream()
-                    .map(GrantedAuthority::getAuthority)
-                    .findFirst()
-                    .orElseThrow(IllegalAccessError::new)) {
-                case "ROLE_STUDENT" -> response.sendRedirect("/student");
-                case "ROLE_TEACHER" -> response.sendRedirect("/teacher");
-                case "ROLE_ADMIN" -> response.sendRedirect("/admin");
-            }
-        };
+        return (_, response, _) -> response.sendRedirect(getRedirect());
+    }
+
+    private String getRedirect() {
+        return "/" + Role.toSimpleString(userDetailsService.getLoggedInUser().getRole());
     }
 
     @Bean

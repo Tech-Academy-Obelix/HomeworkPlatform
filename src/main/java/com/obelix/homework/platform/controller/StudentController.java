@@ -17,6 +17,11 @@ import java.util.UUID;
 public class StudentController {
     private final StudentService studentService;
 
+    @GetMapping()
+    public String student() {
+        return "Hello Student";
+    }
+
     @GetMapping("/assignments")
     public List<HomeworkAssignment> getAssignments() {
         return studentService.getAssignments();

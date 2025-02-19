@@ -32,19 +32,17 @@ public class UserDetailsService implements org.springframework.security.core.use
     }
 
     // Registers a new user by using the provided user details.
-    public void registerUser(UserDto user) {
+    public User registerUser(UserDto user) {
         throwIfUsernameExists(user.getUsername());  // Checks if the username already exists, throws an exception if it does.
         InviteCode inviteCode = inviteCodeService.getInviteCodeById(user.getInviteCode());  // Fetches the invite code using the provided invite code ID.
-        userDetailsRepo.save(buildUser(inviteCode, user.getUsername()));
         inviteCodeService.removeInviteCode(inviteCode);  // Removes the invite code after it’s used for registration.
+        return userDetailsRepo.save(buildUser(inviteCode, user.getUsername()));
     }
 
     public User getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         if (authentication != null) {
             Object principal = authentication.getPrincipal();
-
             if (principal instanceof User) {
                 return (User) principal; // Cast to your User class (if using custom user details)
             }

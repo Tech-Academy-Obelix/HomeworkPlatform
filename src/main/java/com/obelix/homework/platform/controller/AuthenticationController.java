@@ -30,14 +30,14 @@ public class AuthenticationController {
     private final AuthenticationFailureHandler failureHandler;
 
     @PostMapping("/login")
-    public String login(@RequestBody User user) throws IOException,    ServletException {
+    public String login(@RequestBody User user) throws IOException, ServletException {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(user.getUsername(), passwordEncoder.encode(user.getPassword()));
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             successHandler.onAuthenticationSuccess(null, null, authentication);
-            return "redirect:/" + Role.toSimpleString(user.getRole());
+            return "redirect:/";
         } catch (AuthenticationException ex) {
             failureHandler.onAuthenticationFailure(null, null, ex);
             return "login";
@@ -60,8 +60,8 @@ public class AuthenticationController {
 
     // This method will handle registration requests. The body of the request should contain user details (username, password).
     @PostMapping("/register")
-    public void register(@RequestBody UserDto user) {
-        userDetailsService.registerUser(user);  // Registers the user with the provided user details
+    public User register(@RequestBody UserDto user) {
+        return userDetailsService.registerUser(user);  // Registers the user with the provided user details
     }
 }
 
