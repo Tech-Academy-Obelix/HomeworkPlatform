@@ -9,7 +9,7 @@ import java.util.UUID;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    UUID id;
+    private UUID id;
 
     private String subjectName;
 

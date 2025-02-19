@@ -1,7 +1,6 @@
 package com.obelix.homework.platform.controller;
 
 import com.obelix.homework.platform.model.dto.UserDto;
-import com.obelix.homework.platform.role.Role;
 import com.obelix.homework.platform.service.UserDetailsService;
 import jakarta.servlet.ServletException;
 import lombok.RequiredArgsConstructor;
