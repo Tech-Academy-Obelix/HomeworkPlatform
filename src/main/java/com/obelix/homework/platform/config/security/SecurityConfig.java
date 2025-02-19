@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.config.security;
 
-import com.obelix.homework.platform.role.Role;
+import com.obelix.homework.platform.config.security.role.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,9 +1,9 @@
-package com.obelix.homework.platform.service;
+package com.obelix.homework.platform.web.service;
 
 import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.entity.domain.Grade;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
-import com.obelix.homework.platform.model.entity.users.Student;
+import com.obelix.homework.platform.model.entity.user.Student;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.repo.HomeworkAssignmentRepo;
 import com.obelix.homework.platform.repo.SubmittedHomeworkAssignmentRepo;

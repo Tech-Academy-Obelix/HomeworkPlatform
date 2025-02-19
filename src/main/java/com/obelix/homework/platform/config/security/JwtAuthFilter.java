@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.config.security;
 
-import com.obelix.homework.platform.service.UserService;
+import com.obelix.homework.platform.web.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

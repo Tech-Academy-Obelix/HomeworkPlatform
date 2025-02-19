@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.entity.users;
+package com.obelix.homework.platform.model.entity.user;
 
 import com.obelix.homework.platform.model.entity.domain.Course;
 import com.obelix.homework.platform.model.entity.domain.Grade;

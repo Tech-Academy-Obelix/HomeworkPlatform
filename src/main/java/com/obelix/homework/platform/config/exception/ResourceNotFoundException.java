@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.exception;
+package com.obelix.homework.platform.config.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {
