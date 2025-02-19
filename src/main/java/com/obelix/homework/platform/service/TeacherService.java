@@ -53,5 +53,6 @@ public class TeacherService {
 
     public SubmittedHomeworkAssignment getSubmittedAssignment(UUID id) {
         return submittedHomeworkAssignmentRepo.getSubmittedHomeworkAssignmentById(id);
+
     }
 }
