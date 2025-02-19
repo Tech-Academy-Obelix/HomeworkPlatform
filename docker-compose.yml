@@ -22,7 +22,7 @@ services:
     depends_on:
       - database
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/mydb
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/homework_platform
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
     ports:
