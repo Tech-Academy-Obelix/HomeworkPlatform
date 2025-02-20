@@ -70,86 +70,86 @@
 ## config
 - Package containing all configurations, not directly related to business logic. Includes custom exceptions, mapper configurations, and security settings.
 
-	#### exception
-	Custom exceptions for handling specific errors.
-  	- `NoSuchRoleException.java`
-  	- `ResourceNotFoundException.java`
-  	- `UsernameExistsException.java`
+  #### exception
+	- Custom exceptions for handling specific errors.
+		- `NoSuchRoleException.java`
+		- `ResourceNotFoundException.java`
+		- `UsernameExistsException.java`
 
-	#### mapper
-	ModelMapper configuration and custom converters.
-	  - `DtoToHomeworkAssignmentConverter.java`
-	  - `ModelMapperConfig.java`
-	
-	#### security
-	All security-related configurations, such as JWT configuration, filter chains, password encoding, and granted authorities.
-	  - `JwtAuthFilter.java`
-	  - `JwtUtils.java`
-	  - `PasswordEncoderConfig.java`
-	  - `SecurityConfig.java`
-	
-	#### role
-	Contains the `Role` enum, responsible for granted authorities.
-	  - `Role.java`
+  #### mapper
+	- ModelMapper configuration and custom converters.
+		- `DtoToHomeworkAssignmentConverter.java`
+		- `ModelMapperConfig.java`
+
+  #### security
+	- All security-related configurations, such as JWT configuration, filter chains, password encoding, and granted authorities.
+		- `JwtAuthFilter.java`
+		- `JwtUtils.java`
+		- `PasswordEncoderConfig.java`
+		- `SecurityConfig.java`
+
+  #### role
+	- Contains the `Role` enum, responsible for granted authorities.
+		- `Role.java`
 
 ## model
 - The application's core data structures, including DTOs and entities.
 
-	#### dto
-	Data Transfer Objects used for transferring data between layers of the application.
-	  - `CourseDto.java`
-	  - `HomeworkAssignmentDto.java`
-	  - `InviteCodeDto.java`
-	  - `RegisterDto.java`
-	  - `SubmittedHomeworkAssignmentDto.java`
-	
-	#### entity
-	User-related and domain-specific entities representing the primary data structure in the database.
-		##### core
-		Entities used for administration.
-		  - `InviteCode.java`
-		
-		###### domain
-		Core business concepts of the application.
-		  - `Course.java`
-		  - `Grade.java`
-		  - `HomeworkAssignment.java`
-		  - `Subject.java`
-		  - `SubmittedHomeworkAssignment.java`
-		
-		###### user
-		User-specific entities.
-		  - `Admin.java`
-		  - `Student.java`
-		  - `Teacher.java`
-		  - `User.java`
+  #### dto
+	- Data Transfer Objects used for transferring data between layers of the application.
+		- `CourseDto.java`
+		- `HomeworkAssignmentDto.java`
+		- `InviteCodeDto.java`
+		- `RegisterDto.java`
+		- `SubmittedHomeworkAssignmentDto.java`
+
+  #### entity
+	- User-related and domain-specific entities representing the primary data structure in the database.
+
+	  ##### core
+		- Entities used for administration.
+			- `InviteCode.java`
+
+	  ###### domain
+		- Core business concepts of the application.
+			- `Course.java`
+			- `Grade.java`
+			- `HomeworkAssignment.java`
+			- `Subject.java`
+			- `SubmittedHomeworkAssignment.java`
+
+	  ###### user
+		- User-specific entities.
+			- `Admin.java`
+			- `Student.java`
+			- `Teacher.java`
+			- `User.java`
 
 ## repo
-Repository interfaces for data access and interactions with the database.
-  - `CourseRepo.java`
-  - `GradeRepo.java`
-  - `HomeworkAssignmentRepo.java`
-  - `InviteCodeRepo.java`
-  - `SubjectRepo.java`
-  - `SubmittedHomeworkAssignmentRepo.java`
-  - `TeacherRepository.java`
-  - `UserDetailsRepo.java`
+- Repository interfaces for data access and interactions with the database.
+	- `CourseRepo.java`
+	- `GradeRepo.java`
+	- `HomeworkAssignmentRepo.java`
+	- `InviteCodeRepo.java`
+	- `SubjectRepo.java`
+	- `SubmittedHomeworkAssignmentRepo.java`
+	- `TeacherRepository.java`
+	- `UserDetailsRepo.java`
 
 ## web
-The controller and service layers, handling HTTP requests and business logic.
+- The controller and service layers, handling HTTP requests and business logic.
 
-	#### controller
-	Handles HTTP requests and user interactions.
-	  - `AdminController.java`
-	  - `AuthenticationController.java`
-	  - `StudentController.java`
-	  - `TeacherController.java`
-	  - `UserController.java`
-	
-	#### service
-	Contains business logic and service layer for handling operations.
-	  - `InviteCodeService.java`
-	  - `StudentService.java`
-	  - `TeacherService.java`
-	  - `UserService.java`
+  #### controller
+	- Handles HTTP requests and user interactions.
+		- `AdminController.java`
+		- `AuthenticationController.java`
+		- `StudentController.java`
+		- `TeacherController.java`
+		- `UserController.java`
 
+  #### service
+	- Contains business logic and service layer for handling operations.
+		- `InviteCodeService.java`
+		- `StudentService.java`
+		- `TeacherService.java`
+		- `UserService.java`
