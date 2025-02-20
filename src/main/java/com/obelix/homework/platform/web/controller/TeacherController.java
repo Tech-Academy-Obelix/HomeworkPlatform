@@ -1,10 +1,12 @@
-package com.obelix.homework.platform.controller;
+package com.obelix.homework.platform.web.controller;
 
 import com.obelix.homework.platform.model.dto.CourseDto;
+import com.obelix.homework.platform.model.dto.GradeDto;
 import com.obelix.homework.platform.model.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.entity.domain.Course;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
-import com.obelix.homework.platform.service.TeacherService;
+import com.obelix.homework.platform.web.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +49,26 @@ public class TeacherController {
     public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID id) {
         return teacherService.getSubmittedAssignment(id);
     }
+    @PostMapping("/submitted-assignments/{id}")
+    public SubmittedHomeworkAssignment gradeSubmittedAssignments(@PathVariable UUID id, @RequestBody GradeDto grade){
+        return teacherService.gradeSubmittedAssignments(id, grade);
+    }
+
+    @GetMapping("/own-course")
+    public Course getCourse(){
+        return teacherService.getCourse();
+    }
+
+    @GetMapping("/courses")
+    public List<Course> getCourses(){
+        return teacherService.getCourses();
+    }
+
+    @GetMapping("/courses/{id}")
+    public Course getCourseById(@PathVariable UUID id){
+        return teacherService.getCourseById(id);
+    }
+
 
 
 }

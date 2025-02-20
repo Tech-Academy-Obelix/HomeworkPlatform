@@ -1,27 +1,19 @@
 package com.obelix.homework.platform.model.entity.user;
 
-import jakarta.persistence.*;
-import lombok.*;
+import com.obelix.homework.platform.model.entity.domain.Course;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.Getter;
+
+import java.util.List;
 
 @Entity
-@Table(name = "teachers")
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
-public class Teacher {
+public class Teacher extends User {
+    @OneToOne
+    private Course ownCourse;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String name;
-
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String subject;
+    @OneToMany
+    private List<Course> courses;
 }

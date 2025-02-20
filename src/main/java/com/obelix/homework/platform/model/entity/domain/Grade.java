@@ -5,13 +5,17 @@ import com.obelix.homework.platform.model.entity.user.Teacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
+@Setter
 public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

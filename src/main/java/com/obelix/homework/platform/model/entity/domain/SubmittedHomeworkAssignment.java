@@ -1,14 +1,19 @@
 package com.obelix.homework.platform.model.entity.domain;
 
 import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.entity.user.Student;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.Date;
 
 @Entity
 @NoArgsConstructor
+@Getter
+@Setter
 
 public class SubmittedHomeworkAssignment extends HomeworkAssignment {
     private String solution;
@@ -18,6 +23,9 @@ public class SubmittedHomeworkAssignment extends HomeworkAssignment {
 
     @OneToOne
     private Grade grade;
+
+    @OneToOne
+    private Student student;
 
     public SubmittedHomeworkAssignment(HomeworkAssignment homeworkAssignment, SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
         super(homeworkAssignment);
