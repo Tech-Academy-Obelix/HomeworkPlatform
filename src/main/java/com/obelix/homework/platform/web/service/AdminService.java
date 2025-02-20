@@ -27,6 +27,6 @@ public class AdminService {
     }
 
     public List<LogDto> getAllLogs() {
-
+        return null;
     }
 }
