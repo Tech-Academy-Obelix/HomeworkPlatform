@@ -60,6 +60,24 @@
 - /student/submitted-assignments/id (GET) - Returns only the submitted assignment with the specified id
 - /student/grades (GET) - Page for the grades of the student
 
+# Teacher
+- /teachers/assignments (POST) - Submitting assignments Expects an assignment dto:
+  ```json
+		{
+			"id":UUID,
+			"solution":solution
+		}
+  ```
+- /teachers/assignments (GET) - Page for all assigned homework assignments
+- /teachers/assignments/{id} (GET) - Returns only the assignment with the specified id
+- /teachers/assignments/{id} (POST) - Assign an assignment to a course, expects CourseDto
+- /teachers/submitted-assignments (GET) - Page for all submitted homework assignments
+- /teachers/submitted-assignments/{id} (GET) - Returns only the submitted assignment with the specified id
+- /teachers/submitted-assignments/{id} (POST) - Grade a submitted assignment, expects GradeDto
+- /teachers/own-course (GET) - Get the teacher's own course
+- /teachers/courses (GET) - Page for all courses
+- /teachers/courses/{id} (GET) - Returns only the course with the specified id
+
 # Project Structure
 
 ## src.main.java.com.obelix.homework.platform
