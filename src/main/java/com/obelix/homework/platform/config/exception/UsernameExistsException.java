@@ -7,6 +7,6 @@ public class UsernameExistsException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public UsernameExistsException(String username) {
-        super(String.format("Username %s is already in use.", username));
+        super(String.format("Username is already in use: %s", username));
     }
 }

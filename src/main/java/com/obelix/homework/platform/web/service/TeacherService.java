@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.web.service;
 
+import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.config.exception.CourseNotFoundException;
 import com.obelix.homework.platform.model.dto.CourseDto;
 import com.obelix.homework.platform.model.dto.GradeDto;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -38,45 +40,46 @@ public class TeacherService {
     }
 
     public List<HomeworkAssignment> getHomeworkAssignments() {
-        return homeworkAssignmentRepo.findAll();
+        return teacher.getCourses().stream()
+                .flatMap(course -> course.getAssignments().stream())
+                .collect(Collectors.toList());
     }
 
     public HomeworkAssignment getAssignment(UUID id) {
-        return homeworkAssignmentRepo.getHomeworkAssignmentById(id);
+        return teacher.getCourses().stream()
+                .flatMap(course -> course.getAssignments().stream())
+                .filter(assignment -> assignment.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
     }
 
     public List<HomeworkAssignment> assignAssignmentToCourse(UUID id, CourseDto courseDto) {
-        Course course = courseRepo.getCourseByCourseName(courseDto.getCourseName());
+        var course = getCourseByName(courseDto.getCourseName());
         course.getAssignments().add(getAssignment(id));
-        courseRepo.save(course);
-        return course.getAssignments();
+        return courseRepo.save(course).getAssignments();
     }
 
     public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignments() {
-        return submittedHomeworkAssignmentRepo.findAll();
+            return teacher.getCourses().stream()
+                    .flatMap(course -> course.getStudents().stream()
+                            .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()))
+                    .collect(Collectors.toList());
+        }
+
+    public SubmittedHomeworkAssignment getSubmittedAssignmentById(UUID id) {
+        return teacher.getCourses().stream()
+                .flatMap(course -> course.getStudents().stream()
+                        .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()))
+                .filter(assignment -> assignment.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
     }
 
-    public SubmittedHomeworkAssignment getSubmittedAssignment(UUID id) {
-        return submittedHomeworkAssignmentRepo.getSubmittedHomeworkAssignmentById(id);
-    }
-
-    public SubmittedHomeworkAssignment gradeSubmittedAssignments(UUID id, GradeDto gradeDto) {
-        var assignment = submittedHomeworkAssignmentRepo.getSubmittedHomeworkAssignmentById(id);
-        var grade = buildGrade(assignment);
-        assignment.setGrade(grade);
+    public SubmittedHomeworkAssignment gradeSubmittedAssignment(UUID id, GradeDto gradeDto) {
+        var assignment = getSubmittedAssignmentById(id);
+        assignment.setGrade(gradeRepo.save(buildGrade(assignment)));
         assignment.setTeacherComment(gradeDto.getTeacherComment());
-        gradeRepo.save(grade);
         return submittedHomeworkAssignmentRepo.save(assignment);
-    }
-
-    public Grade buildGrade(SubmittedHomeworkAssignment assignment){
-        return Grade.builder()
-               .grade(0)
-               .timestamp(new Date())
-               .student(assignment.getStudent())
-               .teacher(teacher)
-               .subject(assignment.getSubject())
-               .build();
     }
 
     public Course getCourse() {
@@ -93,6 +96,23 @@ public class TeacherService {
                 .findFirst()
                 .orElseThrow(() -> new CourseNotFoundException(id.toString()));
 
+    }
+
+    private Grade buildGrade(SubmittedHomeworkAssignment assignment){
+        return Grade.builder()
+                .grade(0)
+                .timestamp(new Date())
+                .student(assignment.getStudent())
+                .teacher(teacher)
+                .subject(assignment.getSubject())
+                .build();
+    }
+
+    private Course getCourseByName(String name) {
+        return teacher.getCourses().stream()
+                .filter(course1 -> course1.getCourseName().equals(name))
+                .findFirst()
+                .orElseThrow(() -> new CourseNotFoundException(name));
     }
 
     @PostConstruct

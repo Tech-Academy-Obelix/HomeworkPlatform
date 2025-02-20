@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.web.service;
 
+import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.entity.domain.Grade;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
@@ -28,20 +29,23 @@ public class StudentService {
     }
 
     public HomeworkAssignment getAssignment(UUID id) {
-        return homeworkAssignmentRepo.getHomeworkAssignmentById(id);
+        return student.getCourse().getAssignments().stream()
+                .filter(assignment -> assignment.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
     }
 
     public SubmittedHomeworkAssignment submitAssignment(SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
         return submittedHomeworkAssignmentRepo.save(new SubmittedHomeworkAssignment(
                 homeworkAssignmentRepo.getHomeworkAssignmentById(submittedHomeworkAssignmentDto.getId()),
-                submittedHomeworkAssignmentDto
-        ));
+                submittedHomeworkAssignmentDto));
     }
 
     public List<SubmittedHomeworkAssignment> submitBulkAssignments(List<SubmittedHomeworkAssignmentDto> submittedHomeworkAssignmentDtos) {
-        return submittedHomeworkAssignmentDtos.stream()
+        return submittedHomeworkAssignmentRepo.saveAll(
+                submittedHomeworkAssignmentDtos.stream()
                 .map(this::submitAssignment) // For each DTO, call submitAssignment and map to a Saved Assignment
-                .collect(Collectors.toList()); // Collect the results into a List
+                .collect(Collectors.toList())); // Collect the results into a List
     }
 
     public List<SubmittedHomeworkAssignment> getSubmittedAssignments() {
@@ -49,7 +53,10 @@ public class StudentService {
     }
 
     public SubmittedHomeworkAssignment getSubmittedAssignment(UUID id) {
-        return submittedHomeworkAssignmentRepo.getSubmittedHomeworkAssignmentById(id);
+        return student.getSubmittedHomeworkAssignments().stream()
+                .filter(assignment -> assignment.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
     }
 
     public List<Grade> getGrades() {

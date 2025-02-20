@@ -47,11 +47,11 @@ public class TeacherController {
 
     @GetMapping("/submitted-assignments/{id}")
     public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID id) {
-        return teacherService.getSubmittedAssignment(id);
+        return teacherService.getSubmittedAssignmentById(id);
     }
     @PostMapping("/submitted-assignments/{id}")
     public SubmittedHomeworkAssignment gradeSubmittedAssignments(@PathVariable UUID id, @RequestBody GradeDto grade){
-        return teacherService.gradeSubmittedAssignments(id, grade);
+        return teacherService.gradeSubmittedAssignment(id, grade);
     }
 
     @GetMapping("/own-course")
