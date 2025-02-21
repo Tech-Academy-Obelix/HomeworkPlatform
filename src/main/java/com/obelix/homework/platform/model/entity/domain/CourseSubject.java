@@ -2,25 +2,27 @@ package com.obelix.homework.platform.model.entity.domain;
 
 import com.obelix.homework.platform.model.entity.user.Teacher;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-public class Subject {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CourseSubject {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private String subjectName;
+    @ManyToOne
+    private Course course;
 
-    @ManyToMany
-    private List<Teacher> teachers;
+    @ManyToOne
+    private Subject subject;
 
-    @OneToMany
-    private List<CourseSubject> courseSubjects;
+    @ManyToOne
+    private Teacher teacher;
 }

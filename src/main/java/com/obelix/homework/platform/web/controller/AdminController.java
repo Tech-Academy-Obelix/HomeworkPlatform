@@ -36,7 +36,7 @@ public class AdminController {
         return adminService.getAllUsers();
     }
 
-    @PutMapping("/users/{id}/{role}")
+    @PutMapping("/users/{id}/{roleName}")
     public User updateUserRole(@PathVariable UUID id, @PathVariable String roleName) {
         return adminService.updateUserRole(id, roleName);
     }

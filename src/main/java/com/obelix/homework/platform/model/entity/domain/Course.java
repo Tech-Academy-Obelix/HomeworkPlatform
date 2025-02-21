@@ -15,12 +15,19 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String courseName;
+
     @OneToMany
     private List<Student> students;
+
     @OneToOne
     private Teacher teacher;
+
     @OneToMany
     private List<Subject> subjects;
+
+    @OneToMany
+    private List<CourseSubject> courseSubjects;
+
     @OneToMany
     private List<HomeworkAssignment> assignments;
 
