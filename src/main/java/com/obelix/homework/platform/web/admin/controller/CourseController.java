@@ -54,9 +54,4 @@ public class CourseController {
     public Course addTeacherToSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @PathVariable UUID teacherId) {
         return courseService.addTeacherToSubjectInCourse(id, subjectId, teacherId);
     }
-
-    @DeleteMapping("/courses/{id}/subjects/{subjectId}/teachers/{teacherId}")
-    public void removeTeacherFromSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @PathVariable UUID teacherId) {
-        courseService.removeTeacherFromSubjectInCourse();
-    }
 }
