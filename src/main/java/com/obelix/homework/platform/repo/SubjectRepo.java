@@ -7,4 +7,6 @@ import java.util.UUID;
 
 public interface SubjectRepo extends JpaRepository<Subject, UUID> {
     Subject getSubjectById(UUID id);
+
+    void deleteSubjectById(UUID id);
 }

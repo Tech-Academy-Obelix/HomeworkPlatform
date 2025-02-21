@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.web.service;
+package com.obelix.homework.platform.web.admin.service;
 
 import com.obelix.homework.platform.model.dto.InviteCodeDto;
 import com.obelix.homework.platform.model.entity.core.InviteCode;

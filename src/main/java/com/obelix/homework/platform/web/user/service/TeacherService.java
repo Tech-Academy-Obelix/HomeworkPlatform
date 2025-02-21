@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.web.service;
+package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.config.exception.CourseNotFoundException;

@@ -1,10 +1,10 @@
-package com.obelix.homework.platform.web.controller;
+package com.obelix.homework.platform.web.admin.controller;
 
 import com.obelix.homework.platform.model.dto.InviteCodeDto;
 import com.obelix.homework.platform.model.dto.LogDto;
 import com.obelix.homework.platform.model.entity.user.User;
-import com.obelix.homework.platform.web.service.AdminService;
-import com.obelix.homework.platform.web.service.InviteCodeService;
+import com.obelix.homework.platform.web.admin.service.AdminService;
+import com.obelix.homework.platform.web.admin.service.InviteCodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

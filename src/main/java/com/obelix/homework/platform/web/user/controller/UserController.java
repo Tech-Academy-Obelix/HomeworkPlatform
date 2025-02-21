@@ -1,6 +1,6 @@
-package com.obelix.homework.platform.web.controller;
+package com.obelix.homework.platform.web.user.controller;
 
-import com.obelix.homework.platform.web.service.UserService;
+import com.obelix.homework.platform.web.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 

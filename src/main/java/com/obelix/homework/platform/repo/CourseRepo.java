@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface CourseRepo extends JpaRepository<Course, UUID> {
     Course getCoursesById(UUID courseId);
+
+    Course getCourseById(UUID id);
 }

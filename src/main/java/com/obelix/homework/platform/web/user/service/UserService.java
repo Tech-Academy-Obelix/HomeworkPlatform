@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.web.service;
+package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.model.dto.RegisterDto;
 import com.obelix.homework.platform.config.exception.UsernameExistsException;
@@ -6,6 +6,7 @@ import com.obelix.homework.platform.model.entity.core.InviteCode;
 import com.obelix.homework.platform.model.entity.user.User;
 import com.obelix.homework.platform.repo.UserDetailsRepo;
 import com.obelix.homework.platform.config.security.role.Role;
+import com.obelix.homework.platform.web.admin.service.InviteCodeService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

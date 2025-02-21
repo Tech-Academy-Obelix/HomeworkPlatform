@@ -14,9 +14,6 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class Teacher extends User {
-    @OneToOne
-    private Course ownCourse;
-
     @ManyToMany
     private List<Subject> subjects;
 

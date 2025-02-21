@@ -35,6 +35,4 @@ public class Grade {
 
     @OneToOne
     private Subject subject;
-
-
 }

@@ -4,12 +4,14 @@ import com.obelix.homework.platform.model.entity.user.Student;
 import com.obelix.homework.platform.model.entity.user.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,9 +20,6 @@ public class Course {
 
     @OneToMany
     private List<Student> students;
-
-    @OneToOne
-    private Teacher teacher;
 
     @OneToMany
     private List<Subject> subjects;
@@ -31,7 +30,11 @@ public class Course {
     @OneToMany
     private List<HomeworkAssignment> assignments;
 
-    private double getAverageGrade() {
+    public Course(String courseName) {
+        this.courseName = courseName;
+    }
+
+    public double getAverageGrade() {
         double sum = 0;
         for (Student student : students) {
             sum += student.getAverageGrade();
