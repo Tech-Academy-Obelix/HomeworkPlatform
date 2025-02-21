@@ -103,4 +103,29 @@ public class UserService implements UserDetailsService {
                     .build());
         }
     }
+
+    public void changePassword(String oldPassword, String newPassword) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userDetailsRepo.save(user);
+    }
+
+    public void changeEmail(String newEmail) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            throw new RuntimeException("User not authenticated");
+        }
+
+        user.setEmail(newEmail);
+        userDetailsRepo.save(user);
+    }
+
 }
