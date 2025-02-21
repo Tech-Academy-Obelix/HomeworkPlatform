@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.web.service;
 
+import com.obelix.homework.platform.model.dto.InviteCodeDto;
 import com.obelix.homework.platform.model.entity.core.InviteCode;
 import com.obelix.homework.platform.repo.InviteCodeRepo;
 import com.obelix.homework.platform.config.security.role.Role;
@@ -15,11 +16,11 @@ public class InviteCodeService {
     private final InviteCodeRepo inviteCodeRepo;  // Injects the InviteCode repository to interact with the database.
 
     // Grants an invite code for a specific role and email. Returns the UUID of the created invite code.
-    public String grantInviteCode(Role role, String email) {
+    public String grantInviteCode(InviteCodeDto inviteCodeDto) {
         // Saves the invite code entity with the specified role and associated email, and returns its UUID.
         return inviteCodeRepo.save(InviteCode.builder()
-                .role(role)  // Sets the role of the invite code (converted to String).
-                .associatedEmail(email)  // Sets the associated email.
+                .role(Role.fromString(inviteCodeDto.getRoleName()))  // Sets the role of the invite code (converted to String).
+                .associatedEmail(inviteCodeDto.getEmailAssociated())  // Sets the associated email.
                 .build()).getId().toString();  // Returns the ID of the saved invite code.
     }
 

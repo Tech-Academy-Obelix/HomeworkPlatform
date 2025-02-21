@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
     // Loads a user by their username. Throws an exception if the user is not found.
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userDetailsRepo.getUserModelByUsername(username);
+        var user = userDetailsRepo.getUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
@@ -73,7 +73,7 @@ public class UserService implements UserDetailsService {
 
     // Checks if a username already exists in the repository.
     public boolean existsByUsername(String username) {
-        return userDetailsRepo.existsUserModelsByUsername(username);  // Returns true if the username exists, false otherwise.
+        return userDetailsRepo.existsUserByUsername(username);  // Returns true if the username exists, false otherwise.
     }
 
     // Helper method to throw an exception if a username already exists.

@@ -8,9 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 @Repository
 public interface UserDetailsRepo extends JpaRepository<User, UUID> {
-    User getUserModelByUsername(String username);
+    User getUserByUsername(String username);
 
-    boolean existsUserModelsByUsername(String username);
+    boolean existsUserByUsername(String username);
 
-    String deleteById(Long id);
+    User getUserById(UUID id);
+
+    void deleteUserById(UUID id);
 }
