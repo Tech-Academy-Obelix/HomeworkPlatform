@@ -29,4 +29,8 @@ public class Teacher extends User {
                 .map(CourseSubject::getCourse)
                 .collect(Collectors.toList());
     }
+
+    public Course getOwnCourse() {
+        return null;
+    }
 }
