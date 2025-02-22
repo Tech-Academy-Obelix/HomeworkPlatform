@@ -21,7 +21,7 @@ import java.util.UUID;
 @RequestMapping("/student")
 @RequiredArgsConstructor
 public class StudentController {
-    private static final String UPLOAD_DIRECTORY = System.getProperty("") +"/uploads";;
+    //private static final String UPLOAD_DIRECTORY = System.getProperty("") +"/uploads";;
     private final StudentService studentService;
 
     @GetMapping
@@ -68,6 +68,7 @@ public class StudentController {
         return "imageupload/index";
     }
 
+    /*
     @PostMapping("/upload") public String uploadImage(Model model, @RequestParam("image") MultipartFile file) throws IOException, IOException {
         StringBuilder fileNames = new StringBuilder();
         Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
@@ -75,5 +76,6 @@ public class StudentController {
         Files.write(fileNameAndPath, file.getBytes());
         model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
         return "imageupload/index";
-    }
+        }
+     */
 }

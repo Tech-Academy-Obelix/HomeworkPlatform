@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/subjects")
 @RequiredArgsConstructor
 public class SubjectController {
     private final SubjectService subjectService;
