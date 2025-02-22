@@ -28,6 +28,7 @@ public class UserService implements UserDetailsService {
     private final UserRepo userRepo;
     private final InviteCodeService inviteCodeService;
     private final PasswordEncoder passwordEncoder;
+    private final LogService logService;
 
     // Loads a user by their username. Throws an exception if the user is not found.
     @Override
@@ -106,5 +107,70 @@ public class UserService implements UserDetailsService {
                     .role(ROLE_ADMIN)  // Sets the role to ADMIN.
                     .build());
         }
+    }
+
+    public void changePassword(String oldPassword, String newPassword) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            logService.error("Unauthorized password change attempt.");
+            throw new RuntimeException("User not authenticated");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            logService.warn("User " + user.getUsername() + " entered incorrect old password.");
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+        logService.info("User " + user.getUsername() + " changed their password successfully.");
+    }
+
+    public void changeEmail(String newEmail) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            logService.error("Unauthorized email change attempt.");
+            throw new RuntimeException("User not authenticated");
+        }
+
+        user.setEmail(newEmail);
+        userRepo.save(user);
+        logService.info("User " + user.getUsername() + " changed their email successfully to " + user.getEmail() + ".");
+    }
+
+    public void changeUsername(String newUsername) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            logService.error("Unauthorized username change attempt.");
+            throw new RuntimeException("User not authenticated");
+        }
+
+        logService.info("User " + user.getUsername() + " changed their username successfully to " + newUsername + ".");
+        user.setUsername(newUsername);
+        userRepo.save(user);
+    }
+
+    public void changeFirstName(String newFirstName) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            logService.error("Unauthorized first name change attempt.");
+            throw new RuntimeException("User not authenticated");
+        }
+
+        user.setFirstName(newFirstName);
+        userRepo.save(user);
+        logService.info("User " + user.getUsername() + " changed their first name successfully to " + newFirstName + ".");
+    }
+
+    public void changeLastName(String newLastName) {
+        User user = getLoggedInUser();
+        if (user == null) {
+            logService.error("Unauthorized last name change attempt.");
+            throw new RuntimeException("User not authenticated");
+        }
+
+        user.setLastName(newLastName);
+        userRepo.save(user);
+        logService.info("User " + user.getUsername() + " changed their last name successfully to " + user.getLastName() + ".");
     }
 }
