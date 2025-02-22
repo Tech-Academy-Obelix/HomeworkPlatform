@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.web.admin.controller;
 
-import com.obelix.homework.platform.model.entity.domain.Subject;
+import com.obelix.homework.platform.model.dto.domain.SubjectDto;
 import com.obelix.homework.platform.web.admin.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,22 +14,22 @@ import java.util.UUID;
 public class SubjectController {
     private final SubjectService subjectService;
 
-    @GetMapping("/subjects")
-    public List<Subject> getAllSubjects() {
+    @GetMapping
+    public List<SubjectDto> getAllSubjects() {
         return subjectService.getAllSubjects();
     }
 
-    @GetMapping("/subjects/{id}")
-    public Subject getSubject(@PathVariable UUID id) {
+    @GetMapping("/{id}")
+    public SubjectDto getSubject(@PathVariable UUID id) {
         return subjectService.getSubjectById(id);
     }
 
-    @PostMapping("/subjects/{subjectName}")
-    public Subject createSubject(@PathVariable String subjectName) {
+    @PostMapping("/{subjectName}")
+    public SubjectDto createSubject(@PathVariable String subjectName) {
         return subjectService.createSubject(subjectName);
     }
 
-    @DeleteMapping("subjects/{id}")
+    @DeleteMapping("/{id}")
     public void deleteSubject(@PathVariable UUID id) {
         subjectService.deleteSubjectById(id);
     }
