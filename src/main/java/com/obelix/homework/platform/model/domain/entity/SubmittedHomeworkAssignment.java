@@ -1,7 +1,7 @@
-package com.obelix.homework.platform.model.entity.domain;
+package com.obelix.homework.platform.model.domain.entity;
 
-import com.obelix.homework.platform.model.dto.domain.SubmittedHomeworkAssignmentDto;
-import com.obelix.homework.platform.model.entity.user.Student;
+import com.obelix.homework.platform.model.domain.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.user.entity.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

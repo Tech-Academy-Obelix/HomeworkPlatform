@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.dto.core;
+package com.obelix.homework.platform.model.core.dto;
 
 import lombok.Getter;
 

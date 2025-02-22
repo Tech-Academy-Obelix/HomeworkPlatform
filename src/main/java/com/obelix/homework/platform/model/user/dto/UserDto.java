@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.dto.user;
+package com.obelix.homework.platform.model.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

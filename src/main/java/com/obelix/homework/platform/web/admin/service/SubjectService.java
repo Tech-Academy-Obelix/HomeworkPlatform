@@ -1,8 +1,9 @@
 package com.obelix.homework.platform.web.admin.service;
 
-import com.obelix.homework.platform.model.dto.domain.SubjectDto;
-import com.obelix.homework.platform.model.entity.domain.Subject;
+import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.repo.domain.SubjectRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class SubjectService {
     private final SubjectRepo subjectRepo;

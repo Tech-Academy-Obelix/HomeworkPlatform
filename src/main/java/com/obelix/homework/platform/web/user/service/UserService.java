@@ -1,11 +1,14 @@
 package com.obelix.homework.platform.web.user.service;
 
-import com.obelix.homework.platform.model.dto.core.RegisterDto;
+import com.obelix.homework.platform.config.exception.NoSuchRoleException;
+import com.obelix.homework.platform.model.core.dto.RegisterDto;
 import com.obelix.homework.platform.config.exception.UsernameExistsException;
-import com.obelix.homework.platform.model.entity.core.InviteCode;
-import com.obelix.homework.platform.model.entity.user.User;
+import com.obelix.homework.platform.model.core.entity.InviteCode;
+import com.obelix.homework.platform.model.user.entity.Admin;
+import com.obelix.homework.platform.model.user.entity.Student;
+import com.obelix.homework.platform.model.user.entity.Teacher;
+import com.obelix.homework.platform.model.user.entity.User;
 import com.obelix.homework.platform.repo.user.UserRepo;
-import com.obelix.homework.platform.config.security.role.Role;
 import com.obelix.homework.platform.web.admin.service.InviteCodeService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import static com.obelix.homework.platform.config.security.role.Role.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +44,15 @@ public class UserService implements UserDetailsService {
         throwIfUsernameExists(user.getUsername());  // Checks if the username already exists, throws an exception if it does.
         InviteCode inviteCode = inviteCodeService.getInviteCodeById(user.getInviteCode());  // Fetches the invite code using the provided invite code ID.
         inviteCodeService.removeInviteCode(inviteCode);  // Removes the invite code after it’s used for registration.
-        return userRepo.save(buildUser(inviteCode, user.getUsername()));
+        return userRepo.save(transformUserToSubclass(buildUser(inviteCode, user.getUsername())));
+    }
+
+    public Teacher getLoggedInTeacher() {
+        var user = getLoggedInUser();
+        if (user instanceof Teacher) {
+            return (Teacher) user;
+        }
+        throw new ClassCastException("User is not a Teacher");
     }
 
     public User getLoggedInUser() {
@@ -50,7 +63,6 @@ public class UserService implements UserDetailsService {
                 return (User) principal; // Cast to your User class
             }
         }
-
         return null; // If no authentication is present
     }
 
@@ -66,8 +78,16 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    private User transformUserToSubclass(User user) {
+        return switch (user.getRole()) {
+            case ROLE_ADMIN -> new Admin(user);
+            case ROLE_TEACHER -> new Teacher(user);
+            case ROLE_STUDENT -> new Student(user);
+            case null, default -> throw new NoSuchRoleException("null");
+        };
+    }
+
     private User buildUser(InviteCode inviteCode, String username) {
-        // Create the common user data (e.g., username, password, email)
         return User.builder()
                 .username(username)
                 .password(passwordEncoder.encode(inviteCode.toString())) // Password encoded from the invite code
@@ -76,13 +96,14 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
+
     @PostConstruct
     protected void init() {
         if (!existsByUsername("admin")) {
             userRepo.save(User.builder()  // Saves a default admin user to the repository.
                     .username("admin")  // Default username for the admin.
                     .password(passwordEncoder.encode("admin"))  // Default password for the admin, encoded.
-                    .role(Role.ROLE_ADMIN)  // Sets the role to ADMIN.
+                    .role(ROLE_ADMIN)  // Sets the role to ADMIN.
                     .build());
         }
     }

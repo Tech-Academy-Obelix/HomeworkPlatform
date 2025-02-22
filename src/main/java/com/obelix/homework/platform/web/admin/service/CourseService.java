@@ -2,8 +2,8 @@ package com.obelix.homework.platform.web.admin.service;
 
 import com.obelix.homework.platform.config.exception.CourseNotFoundException;
 import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
-import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.Subject;
+import com.obelix.homework.platform.model.domain.entity.Course;
+import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.repo.domain.CourseRepo;
 import com.obelix.homework.platform.repo.domain.CourseSubjectRepo;
 import com.obelix.homework.platform.repo.domain.SubjectRepo;

@@ -2,18 +2,16 @@ package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.config.exception.CourseNotFoundException;
-import com.obelix.homework.platform.model.dto.domain.GradeDto;
-import com.obelix.homework.platform.model.dto.domain.HomeworkAssingmentDto;
-import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.Grade;
-import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
-import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
-import com.obelix.homework.platform.model.entity.user.Teacher;
+import com.obelix.homework.platform.model.domain.dto.GradeDto;
+import com.obelix.homework.platform.model.domain.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.domain.entity.Course;
+import com.obelix.homework.platform.model.domain.entity.Grade;
+import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
+import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.repo.domain.CourseRepo;
 import com.obelix.homework.platform.repo.domain.GradeRepo;
 import com.obelix.homework.platform.repo.domain.HomeworkAssignmentRepo;
 import com.obelix.homework.platform.repo.domain.SubmittedHomeworkAssignmentRepo;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -32,20 +30,19 @@ public class TeacherService {
     private final SubmittedHomeworkAssignmentRepo submittedHomeworkAssignmentRepo;
     private final GradeRepo gradeRepo;
     private final UserService userService;
-    private Teacher teacher;
 
     public HomeworkAssignment createAssignment(HomeworkAssingmentDto dto) {
         return homeworkAssignmentRepo.save(modelMapper.map(dto, HomeworkAssignment.class));
     }
 
     public List<HomeworkAssignment> getHomeworkAssignments() {
-        return teacher.getCourses().stream()
+        return userService.getLoggedInTeacher().getCourses().stream()
                 .flatMap(course -> course.getAssignments().stream())
                 .collect(Collectors.toList());
     }
 
     public HomeworkAssignment getAssignment(UUID id) {
-        return teacher.getCourses().stream()
+        return userService.getLoggedInTeacher().getCourses().stream()
                 .flatMap(course -> course.getAssignments().stream())
                 .filter(assignment -> assignment.getId().equals(id))
                 .findFirst()
@@ -59,14 +56,14 @@ public class TeacherService {
     }
 
     public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignments() {
-            return teacher.getCourses().stream()
+            return userService.getLoggedInTeacher().getCourses().stream()
                     .flatMap(course -> course.getStudents().stream()
                             .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()))
                     .collect(Collectors.toList());
         }
 
     public SubmittedHomeworkAssignment getSubmittedAssignmentById(UUID id) {
-        return teacher.getCourses().stream()
+        return userService.getLoggedInTeacher().getCourses().stream()
                 .flatMap(course -> course.getStudents().stream()
                         .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()))
                 .filter(assignment -> assignment.getId().equals(id))
@@ -82,11 +79,11 @@ public class TeacherService {
     }
 
     public List<Course> getCourses() {
-        return teacher.getCourses();
+        return userService.getLoggedInTeacher().getCourses();
     }
 
     public Course getCourseById(UUID id) {
-        return teacher.getCourses().stream()
+        return userService.getLoggedInTeacher().getCourses().stream()
                 .filter(course -> course.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new CourseNotFoundException(id.toString()));
@@ -98,13 +95,8 @@ public class TeacherService {
                 .grade(0)
                 .timestamp(new Date())
                 .student(assignment.getStudent())
-                .teacher(teacher)
+                .teacher(userService.getLoggedInTeacher())
                 .subject(assignment.getSubject())
                 .build();
-    }
-
-    @PostConstruct
-    public void init() {
-        teacher = (Teacher) userService.getLoggedInUser();
     }
 }

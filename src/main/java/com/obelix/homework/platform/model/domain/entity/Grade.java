@@ -1,7 +1,7 @@
-package com.obelix.homework.platform.model.entity.domain;
+package com.obelix.homework.platform.model.domain.entity;
 
-import com.obelix.homework.platform.model.entity.user.Student;
-import com.obelix.homework.platform.model.entity.user.Teacher;
+import com.obelix.homework.platform.model.user.entity.Student;
+import com.obelix.homework.platform.model.user.entity.Teacher;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

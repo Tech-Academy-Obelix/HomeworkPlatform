@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.entity.domain;
+package com.obelix.homework.platform.model.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

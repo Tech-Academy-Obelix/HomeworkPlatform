@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.admin.service;
 
-import com.obelix.homework.platform.model.dto.core.InviteCodeDto;
-import com.obelix.homework.platform.model.entity.core.InviteCode;
+import com.obelix.homework.platform.model.core.dto.InviteCodeDto;
+import com.obelix.homework.platform.model.core.entity.InviteCode;
 import com.obelix.homework.platform.repo.core.InviteCodeRepo;
 import com.obelix.homework.platform.config.security.role.Role;
 import lombok.RequiredArgsConstructor;

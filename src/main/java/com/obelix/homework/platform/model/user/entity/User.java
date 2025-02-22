@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.entity.user;
+package com.obelix.homework.platform.model.user.entity;
 
 import com.obelix.homework.platform.config.security.role.Role;
 import jakarta.persistence.*;
@@ -33,5 +33,15 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.toString()));
+    }
+
+    public User(User user) {
+        this.id = user.getId();
+        username = user.getUsername();
+        password = user.getPassword();
+        email = user.getEmail();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+        role = user.getRole();
     }
 }

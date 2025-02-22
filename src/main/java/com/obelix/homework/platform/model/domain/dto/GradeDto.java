@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.dto.domain;
+package com.obelix.homework.platform.model.domain.dto;
 
 import lombok.Getter;
 

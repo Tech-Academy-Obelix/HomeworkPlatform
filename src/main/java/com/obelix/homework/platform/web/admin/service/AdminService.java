@@ -2,8 +2,9 @@ package com.obelix.homework.platform.web.admin.service;
 
 import com.obelix.homework.platform.config.exception.UserNotFoundException;
 import com.obelix.homework.platform.config.security.role.Role;
-import com.obelix.homework.platform.model.entity.user.User;
+import com.obelix.homework.platform.model.user.entity.User;
 import com.obelix.homework.platform.repo.user.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class AdminService {
         return userRepo.save(user);
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
         userRepo.deleteUserById(id);
     }

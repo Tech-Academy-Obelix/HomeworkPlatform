@@ -1,8 +1,8 @@
 package com.obelix.homework.platform.repo.domain;
 
-import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.CourseSubject;
-import com.obelix.homework.platform.model.entity.domain.Subject;
+import com.obelix.homework.platform.model.domain.entity.Course;
+import com.obelix.homework.platform.model.domain.entity.CourseSubject;
+import com.obelix.homework.platform.model.domain.entity.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

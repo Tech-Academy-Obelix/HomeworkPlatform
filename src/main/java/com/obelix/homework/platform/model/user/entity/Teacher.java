@@ -1,10 +1,11 @@
-package com.obelix.homework.platform.model.entity.user;
+package com.obelix.homework.platform.model.user.entity;
 
-import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.CourseSubject;
-import com.obelix.homework.platform.model.entity.domain.Subject;
+import com.obelix.homework.platform.model.domain.entity.Course;
+import com.obelix.homework.platform.model.domain.entity.CourseSubject;
+import com.obelix.homework.platform.model.domain.entity.Subject;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Teacher extends User {
     @OneToMany
     private List<CourseSubject> courseSubjects;
@@ -33,7 +35,7 @@ public class Teacher extends User {
                 .collect(Collectors.toList());
     }
 
-    public Course getOwnCourse() {
-        return null;
+    public Teacher(User user) {
+        super(user);
     }
 }

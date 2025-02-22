@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.model.entity.core;
+package com.obelix.homework.platform.model.core.entity;
 
 import com.obelix.homework.platform.config.security.role.Role;
 import jakarta.persistence.*;

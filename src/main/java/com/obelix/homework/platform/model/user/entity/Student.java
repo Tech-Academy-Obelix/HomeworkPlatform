@@ -1,18 +1,20 @@
-package com.obelix.homework.platform.model.entity.user;
+package com.obelix.homework.platform.model.user.entity;
 
-import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.Grade;
-import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
-import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
+import com.obelix.homework.platform.model.domain.entity.Course;
+import com.obelix.homework.platform.model.domain.entity.Grade;
+import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
+import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Student extends User {
     @OneToOne
     private Course course;
@@ -33,5 +35,9 @@ public class Student extends User {
 
     public List<HomeworkAssignment> getHomeworkAssignments() {
         return course.getAssignments();
+    }
+
+    public Student(User user) {
+        super(user);
     }
 }

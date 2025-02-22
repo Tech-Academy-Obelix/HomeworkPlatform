@@ -1,6 +1,6 @@
-package com.obelix.homework.platform.model.dto.domain;
+package com.obelix.homework.platform.model.domain.dto;
 
-import com.obelix.homework.platform.model.dto.user.UserDto;
+import com.obelix.homework.platform.model.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.admin.controller;
 
-import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.Subject;
+import com.obelix.homework.platform.model.domain.entity.Course;
+import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.web.admin.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

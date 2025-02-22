@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.web.admin.controller;
 
-import com.obelix.homework.platform.model.dto.domain.SubjectDto;
+import com.obelix.homework.platform.model.domain.dto.SubjectDto;
 import com.obelix.homework.platform.web.admin.service.SubjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +24,8 @@ public class SubjectController {
         return subjectService.getSubjectById(id);
     }
 
-    @PostMapping("/{subjectName}")
-    public SubjectDto createSubject(@PathVariable String subjectName) {
+    @PostMapping
+    public SubjectDto createSubject(@RequestBody String subjectName) {
         return subjectService.createSubject(subjectName);
     }
 

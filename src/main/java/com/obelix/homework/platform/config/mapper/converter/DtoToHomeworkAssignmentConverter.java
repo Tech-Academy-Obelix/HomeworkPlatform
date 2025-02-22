@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.config.mapper.converter;
 
-import com.obelix.homework.platform.model.dto.domain.HomeworkAssingmentDto;
-import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
+import com.obelix.homework.platform.model.domain.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
 import com.obelix.homework.platform.repo.domain.SubjectRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
