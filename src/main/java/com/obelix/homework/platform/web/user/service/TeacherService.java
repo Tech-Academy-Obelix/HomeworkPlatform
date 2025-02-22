@@ -2,18 +2,17 @@ package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.config.exception.CourseNotFoundException;
-import com.obelix.homework.platform.model.dto.CourseDto;
-import com.obelix.homework.platform.model.dto.GradeDto;
-import com.obelix.homework.platform.model.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.dto.domain.GradeDto;
+import com.obelix.homework.platform.model.dto.domain.HomeworkAssingmentDto;
 import com.obelix.homework.platform.model.entity.domain.Course;
 import com.obelix.homework.platform.model.entity.domain.Grade;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.model.entity.user.Teacher;
-import com.obelix.homework.platform.repo.CourseRepo;
-import com.obelix.homework.platform.repo.GradeRepo;
-import com.obelix.homework.platform.repo.HomeworkAssignmentRepo;
-import com.obelix.homework.platform.repo.SubmittedHomeworkAssignmentRepo;
+import com.obelix.homework.platform.repo.domain.CourseRepo;
+import com.obelix.homework.platform.repo.domain.GradeRepo;
+import com.obelix.homework.platform.repo.domain.HomeworkAssignmentRepo;
+import com.obelix.homework.platform.repo.domain.SubmittedHomeworkAssignmentRepo;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -53,8 +52,8 @@ public class TeacherService {
                 .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
     }
 
-    public List<HomeworkAssignment> assignAssignmentToCourse(UUID id, CourseDto courseDto) {
-        var course = getCourseByName(courseDto.getCourseName());
+    public List<HomeworkAssignment> assignAssignmentToCourse(UUID id, UUID courseId) {
+        var course = getCourseById(courseId);
         course.getAssignments().add(getAssignment(id));
         return courseRepo.save(course).getAssignments();
     }
@@ -82,10 +81,6 @@ public class TeacherService {
         return submittedHomeworkAssignmentRepo.save(assignment);
     }
 
-    public Course getCourse() {
-        return teacher.getOwnCourse();
-    }
-
     public List<Course> getCourses() {
         return teacher.getCourses();
     }
@@ -106,13 +101,6 @@ public class TeacherService {
                 .teacher(teacher)
                 .subject(assignment.getSubject())
                 .build();
-    }
-
-    private Course getCourseByName(String name) {
-        return teacher.getCourses().stream()
-                .filter(course1 -> course1.getCourseName().equals(name))
-                .findFirst()
-                .orElseThrow(() -> new CourseNotFoundException(name));
     }
 
     @PostConstruct

@@ -1,8 +1,7 @@
 package com.obelix.homework.platform.web.user.controller;
 
-import com.obelix.homework.platform.model.dto.CourseDto;
-import com.obelix.homework.platform.model.dto.GradeDto;
-import com.obelix.homework.platform.model.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.dto.domain.GradeDto;
+import com.obelix.homework.platform.model.dto.domain.HomeworkAssingmentDto;
 import com.obelix.homework.platform.model.entity.domain.Course;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
@@ -20,6 +19,11 @@ public class TeacherController {
 
     private final TeacherService teacherService;
 
+    @GetMapping
+    public String teacher() {
+        return "Hello Teacher";
+    }
+
     @PostMapping("/assignments")
     public HomeworkAssignment createAssignment(HomeworkAssingmentDto dto) {
         return teacherService.createAssignment(dto);
@@ -35,9 +39,9 @@ public class TeacherController {
         return teacherService.getAssignment(id);
     }
 
-    @PostMapping("/assignments/{id}")
-    public List<HomeworkAssignment> assignAssignmentToCourse(@PathVariable UUID id, @RequestBody CourseDto course) {
-        return teacherService.assignAssignmentToCourse(id, course);
+    @PostMapping("/assignments/{id}/course/{courseId}")
+    public List<HomeworkAssignment> assignAssignmentToCourse(@PathVariable UUID id, @PathVariable UUID courseId) {
+        return teacherService.assignAssignmentToCourse(id, courseId);
     }
 
     @GetMapping("/submitted-assignments")
@@ -52,11 +56,6 @@ public class TeacherController {
     @PostMapping("/submitted-assignments/{id}")
     public SubmittedHomeworkAssignment gradeSubmittedAssignments(@PathVariable UUID id, @RequestBody GradeDto grade){
         return teacherService.gradeSubmittedAssignment(id, grade);
-    }
-
-    @GetMapping("/own-course")
-    public Course getCourse(){
-        return teacherService.getCourse();
     }
 
     @GetMapping("/courses")

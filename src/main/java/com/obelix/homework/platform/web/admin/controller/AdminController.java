@@ -1,7 +1,6 @@
 package com.obelix.homework.platform.web.admin.controller;
 
-import com.obelix.homework.platform.model.dto.InviteCodeDto;
-import com.obelix.homework.platform.model.dto.LogDto;
+import com.obelix.homework.platform.model.dto.core.InviteCodeDto;
 import com.obelix.homework.platform.model.entity.user.User;
 import com.obelix.homework.platform.web.admin.service.AdminService;
 import com.obelix.homework.platform.web.admin.service.InviteCodeService;
@@ -16,7 +15,6 @@ import java.util.UUID;
 @RequiredArgsConstructor  // Automatically generates a constructor with required fields marked as 'final'.
 public class AdminController {
     private final AdminService adminService;
-
     private final InviteCodeService inviteCodeService;  // Injecting the RoleIdInviteCodeService to handle invite code logic.
 
     // Endpoint to test the controller or greet the admin.
@@ -47,7 +45,7 @@ public class AdminController {
     }
 
     @GetMapping("/logs")
-    public List<LogDto> getAllLogs(){
+    public List<String> getAllLogs(){
         return adminService.getAllLogs();
     }
 }

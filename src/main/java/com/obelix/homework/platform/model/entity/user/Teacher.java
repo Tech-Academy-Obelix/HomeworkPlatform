@@ -14,19 +14,22 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class Teacher extends User {
-    @ManyToMany
-    private List<Subject> subjects;
-
     @OneToMany
     private List<CourseSubject> courseSubjects;
+
+    @Transient
+    private List<Subject> subjects;
 
     @Transient
     private List<Course> courses;
 
     @PostLoad
-    public void setCourses() {
+    public void setCoursesAndSubjects() {
         courses = courseSubjects.stream()
                 .map(CourseSubject::getCourse)
+                .collect(Collectors.toList());
+        subjects = courseSubjects.stream()
+                .map(CourseSubject::getSubject)
                 .collect(Collectors.toList());
     }
 

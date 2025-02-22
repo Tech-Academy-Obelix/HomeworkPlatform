@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.user.controller;
 
 import com.obelix.homework.platform.config.security.JwtUtils;
-import com.obelix.homework.platform.model.dto.RegisterDto;
+import com.obelix.homework.platform.model.dto.core.RegisterDto;
 import com.obelix.homework.platform.config.security.role.Role;
 import com.obelix.homework.platform.web.user.service.UserService;
 import lombok.RequiredArgsConstructor;

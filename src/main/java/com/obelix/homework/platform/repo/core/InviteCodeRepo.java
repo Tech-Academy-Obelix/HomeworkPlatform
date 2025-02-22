@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.repo;
+package com.obelix.homework.platform.repo.core;
 
 import com.obelix.homework.platform.model.entity.core.InviteCode;
 import org.springframework.data.jpa.repository.JpaRepository;

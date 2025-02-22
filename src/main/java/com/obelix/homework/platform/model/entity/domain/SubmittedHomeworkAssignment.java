@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.model.entity.domain;
 
-import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.dto.domain.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.entity.user.Student;
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,9 +1,9 @@
 package com.obelix.homework.platform.web.admin.service;
 
+import com.obelix.homework.platform.config.exception.UserNotFoundException;
 import com.obelix.homework.platform.config.security.role.Role;
-import com.obelix.homework.platform.model.dto.LogDto;
 import com.obelix.homework.platform.model.entity.user.User;
-import com.obelix.homework.platform.repo.UserDetailsRepo;
+import com.obelix.homework.platform.repo.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +13,24 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AdminService {
-    private final UserDetailsRepo userDetailsRepo;
+    private final UserRepo userRepo;
 
     public List<User> getAllUsers() {
-        return userDetailsRepo.findAll();
+        return userRepo.findAll();
     }
 
     public User updateUserRole(UUID id, String roleName) {
-        var user = userDetailsRepo.getUserById(id);
+        var user = userRepo.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id.toString()));
         user.setRole(Role.fromString(roleName));
-        return userDetailsRepo.save(user);
+        return userRepo.save(user);
     }
 
     public void deleteUser(UUID id) {
-        userDetailsRepo.deleteUserById(id);
+        userRepo.deleteUserById(id);
     }
 
-    public List<LogDto> getAllLogs() {
+    public List<String> getAllLogs() {
         return null;
     }
 }

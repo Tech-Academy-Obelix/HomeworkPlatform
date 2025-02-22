@@ -1,13 +1,13 @@
 package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
-import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.dto.domain.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.entity.domain.Grade;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
 import com.obelix.homework.platform.model.entity.user.Student;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
-import com.obelix.homework.platform.repo.HomeworkAssignmentRepo;
-import com.obelix.homework.platform.repo.SubmittedHomeworkAssignmentRepo;
+import com.obelix.homework.platform.repo.domain.HomeworkAssignmentRepo;
+import com.obelix.homework.platform.repo.domain.SubmittedHomeworkAssignmentRepo;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

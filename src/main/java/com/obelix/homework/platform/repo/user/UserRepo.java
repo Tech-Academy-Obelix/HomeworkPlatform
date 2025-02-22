@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.repo;
+package com.obelix.homework.platform.repo.user;
 
 
 import com.obelix.homework.platform.model.entity.user.User;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 @Repository
-public interface UserDetailsRepo extends JpaRepository<User, UUID> {
+public interface UserRepo extends JpaRepository<User, UUID> {
     User getUserByUsername(String username);
 
     boolean existsUserByUsername(String username);

@@ -1,15 +1,19 @@
 package com.obelix.homework.platform.web.admin.service;
 
+import com.obelix.homework.platform.config.exception.CourseNotFoundException;
 import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
 import com.obelix.homework.platform.model.entity.domain.Course;
-import com.obelix.homework.platform.model.entity.domain.CourseSubject;
 import com.obelix.homework.platform.model.entity.domain.Subject;
-import com.obelix.homework.platform.repo.*;
+import com.obelix.homework.platform.repo.domain.CourseRepo;
+import com.obelix.homework.platform.repo.domain.CourseSubjectRepo;
+import com.obelix.homework.platform.repo.domain.SubjectRepo;
+import com.obelix.homework.platform.repo.user.TeacherRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +28,18 @@ public class CourseService {
     }
 
     public Course getCourseById(UUID courseId) {
-        return courseRepo.getCourseById(courseId);
+        return courseRepo.findById(courseId)
+                .orElseThrow(() -> new CourseNotFoundException(courseId.toString()));
     }
 
     public Course createCourse(String courseName) {
         return courseRepo.save(new Course(courseName));
+    }
+
+    public List<Course> createCourses(List<String> courseNames) {
+        return courseRepo.saveAll(courseNames.stream()
+                .map(Course::new)
+                .collect(Collectors.toList()));
     }
 
     public void deleteCourseById(UUID courseId) {
@@ -36,22 +47,27 @@ public class CourseService {
     }
 
     public Course addSubjectToCourse(UUID courseId, UUID subjectId) {
-        return courseSubjectRepo.save(CourseSubject.builder()
-                .course(courseRepo.getCoursesById(courseId))
-                .subject(subjectRepo.getSubjectById(subjectId))
-                .build()).getCourse();
+        var course = getCourseById(courseId);
+        course.getSubjects().add(getSubjectById(subjectId));
+        return courseRepo.save(course);
     }
+    public Course addSubjectsToCourse(UUID courseId, List<UUID> subjectIds) {
+        var course = getCourseById(courseId);
+        course.getSubjects().addAll(subjectIds.stream()
+                .map(this::getSubjectById)
+                .toList());
+        return courseRepo.save(course);
+    }
+
 
     public List<Subject> getSubjectsInCourse(UUID courseId) {
         return courseSubjectRepo.getCourseSubjectsById(courseId);
     }
 
-    public void removeSubjectFromCourse(UUID courseId, UUID subjectId) {
-        courseSubjectRepo.delete(
-                courseSubjectRepo.findCourseSubjectsById(courseId).stream()
-                        .filter(courseSubject -> courseSubject.getSubject().getId().equals(subjectId))
-                        .findFirst()
-                        .orElseThrow(() -> new SubjectNotFoundException("Subject not found")));
+    public Course removeSubjectFromCourse(UUID courseId, UUID subjectId) {
+        var course = getCourseById(courseId);
+        course.getSubjects().remove(getSubjectById(subjectId));
+        return courseRepo.save(course);
     }
 
     public Course addTeacherToSubjectInCourse(UUID courseId, UUID subjectId, UUID teacherId) {
@@ -61,5 +77,10 @@ public class CourseService {
                 .orElseThrow(() -> new SubjectNotFoundException(subjectId.toString()));
         courseSubject.setTeacher(teacherRepo.getTeacherById(teacherId));
         return courseSubjectRepo.save(courseSubject).getCourse();
+    }
+
+    private Subject getSubjectById(UUID subjectId) {
+        return subjectRepo.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException(subjectId.toString()));
     }
 }

@@ -1,10 +1,10 @@
 package com.obelix.homework.platform.web.user.service;
 
-import com.obelix.homework.platform.model.dto.RegisterDto;
+import com.obelix.homework.platform.model.dto.core.RegisterDto;
 import com.obelix.homework.platform.config.exception.UsernameExistsException;
 import com.obelix.homework.platform.model.entity.core.InviteCode;
 import com.obelix.homework.platform.model.entity.user.User;
-import com.obelix.homework.platform.repo.UserDetailsRepo;
+import com.obelix.homework.platform.repo.user.UserRepo;
 import com.obelix.homework.platform.config.security.role.Role;
 import com.obelix.homework.platform.web.admin.service.InviteCodeService;
 import jakarta.annotation.PostConstruct;
@@ -20,44 +20,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final UserDetailsRepo userDetailsRepo;
+    private final UserRepo userRepo;
     private final InviteCodeService inviteCodeService;
     private final PasswordEncoder passwordEncoder;
 
     // Loads a user by their username. Throws an exception if the user is not found.
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userDetailsRepo.getUserByUsername(username);
+        var user = userRepo.getUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(username);
         }
         return user;
     }
-
-/*    public User findUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userDetailsRepo.getUserModelByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException(username);
-        }
-        return user;
-    }
-
-    public User authenticate(CredentialsDto credentialsDto) {
-        User user = userDetailsRepo.getUserModelByUsername(credentialsDto.getUsername());
-        if (passwordEncoder.matches(credentialsDto.getPassword(), user.getPassword())) {
-            return user;
-        }
-        throw new RuntimeException("Invalid password");
-    }
-
- */
 
     // Registers a new user by using the provided user details.
     public User registerUser(RegisterDto user) {
         throwIfUsernameExists(user.getUsername());  // Checks if the username already exists, throws an exception if it does.
         InviteCode inviteCode = inviteCodeService.getInviteCodeById(user.getInviteCode());  // Fetches the invite code using the provided invite code ID.
         inviteCodeService.removeInviteCode(inviteCode);  // Removes the invite code after it’s used for registration.
-        return userDetailsRepo.save(buildUser(inviteCode, user.getUsername()));
+        return userRepo.save(buildUser(inviteCode, user.getUsername()));
     }
 
     public User getLoggedInUser() {
@@ -74,7 +56,7 @@ public class UserService implements UserDetailsService {
 
     // Checks if a username already exists in the repository.
     public boolean existsByUsername(String username) {
-        return userDetailsRepo.existsUserByUsername(username);  // Returns true if the username exists, false otherwise.
+        return userRepo.existsUserByUsername(username);  // Returns true if the username exists, false otherwise.
     }
 
     // Helper method to throw an exception if a username already exists.
@@ -97,7 +79,7 @@ public class UserService implements UserDetailsService {
     @PostConstruct
     protected void init() {
         if (!existsByUsername("admin")) {
-            userDetailsRepo.save(User.builder()  // Saves a default admin user to the repository.
+            userRepo.save(User.builder()  // Saves a default admin user to the repository.
                     .username("admin")  // Default username for the admin.
                     .password(passwordEncoder.encode("admin"))  // Default password for the admin, encoded.
                     .role(Role.ROLE_ADMIN)  // Sets the role to ADMIN.

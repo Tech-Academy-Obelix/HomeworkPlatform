@@ -1,8 +1,8 @@
 package com.obelix.homework.platform.config.mapper.converter;
 
-import com.obelix.homework.platform.model.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.dto.domain.HomeworkAssingmentDto;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
-import com.obelix.homework.platform.repo.SubjectRepo;
+import com.obelix.homework.platform.repo.domain.SubjectRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
@@ -17,7 +17,7 @@ public class DtoToHomeworkAssignmentConverter implements Converter<HomeworkAssin
 
     @Override
     public HomeworkAssignment convert(MappingContext<HomeworkAssingmentDto, HomeworkAssignment> mappingContext) {
-        HomeworkAssingmentDto source = mappingContext.getSource();
+        var source = mappingContext.getSource();
         return HomeworkAssignment.builder()
                 .assignmentName(source.getAssignmentName())
                 .assignmentDescription(source.getAssignmentDescription())

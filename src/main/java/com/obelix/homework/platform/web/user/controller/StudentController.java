@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.web.user.controller;
 
-import com.obelix.homework.platform.model.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.dto.domain.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.entity.domain.Grade;
 import com.obelix.homework.platform.model.entity.domain.HomeworkAssignment;
 import com.obelix.homework.platform.model.entity.domain.SubmittedHomeworkAssignment;
@@ -24,7 +24,7 @@ public class StudentController {
     private static final String UPLOAD_DIRECTORY = System.getProperty("") +"/uploads";;
     private final StudentService studentService;
 
-    @GetMapping()
+    @GetMapping
     public String student() {
         return "Hello Student";
     }

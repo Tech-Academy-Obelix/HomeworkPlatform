@@ -10,47 +10,57 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/admin/courses")
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
 
-    @GetMapping("/courses")
+    @GetMapping
     public List<Course> getAllCourses() {
         return courseService.getAllCourses();
     }
 
-    @GetMapping("/courses/{id}")
+    @GetMapping("/{id}")
     public Course getCourse(@PathVariable UUID id) {
         return courseService.getCourseById(id);
     }
 
-    @PostMapping("/courses/{courseName}")
-    public Course createCourse(@PathVariable String courseName) {
+    @PostMapping
+    public Course createCourse(@RequestBody String courseName) {
         return courseService.createCourse(courseName);
     }
 
-    @DeleteMapping("/courses/{id}")
+    @PostMapping("/bulk")
+    public List<Course> createCourses(@RequestBody List<String> courseNames) {
+        return courseService.createCourses(courseNames);
+    }
+
+    @DeleteMapping("/{id}")
     public void deleteCourse(@PathVariable UUID id) {
         courseService.deleteCourseById(id);
     }
 
-    @PutMapping("/courses/{id}/subjects/{subjectId}")
+    @PutMapping("/{id}/subjects/{subjectId}")
     public Course addSubject(@PathVariable UUID id, @PathVariable UUID subjectId) {
         return courseService.addSubjectToCourse(id, subjectId);
     }
 
-    @GetMapping("/courses/{id}/subjects")
+    @PutMapping("/{id}/subjects")
+    public Course addSubjects(@PathVariable UUID id, @RequestBody List<UUID> subjectIds) {
+        return courseService.addSubjectsToCourse(id, subjectIds);
+    }
+
+    @GetMapping("/{id}/subjects")
     public List<Subject> getSubjectsInCourse(@PathVariable UUID id) {
         return courseService.getSubjectsInCourse(id);
     }
 
-    @DeleteMapping("/courses/{id}/subjects/{subjectId}")
-    public void removeSubject(@PathVariable UUID id, @PathVariable UUID subjectId) {
-        courseService.removeSubjectFromCourse(id, subjectId);
+    @DeleteMapping("/{id}/subjects/{subjectId}")
+    public Course removeSubject(@PathVariable UUID id, @PathVariable UUID subjectId) {
+        return courseService.removeSubjectFromCourse(id, subjectId);
     }
 
-    @PutMapping("/courses/{id}/subjects/{subjectId}/teachers/{teacherId}")
+    @PutMapping("/{id}/subjects/{subjectId}/teachers/{teacherId}")
     public Course addTeacherToSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @PathVariable UUID teacherId) {
         return courseService.addTeacherToSubjectInCourse(id, subjectId, teacherId);
     }

@@ -1,4 +1,4 @@
-package com.obelix.homework.platform.repo;
+package com.obelix.homework.platform.repo.domain;
 
 import com.obelix.homework.platform.model.entity.domain.Course;
 import com.obelix.homework.platform.model.entity.domain.CourseSubject;
