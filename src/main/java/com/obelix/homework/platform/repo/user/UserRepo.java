@@ -12,7 +12,5 @@ public interface UserRepo extends JpaRepository<User, UUID> {
 
     boolean existsUserByUsername(String username);
 
-    User getUserById(UUID id);
-
     void deleteUserById(UUID id);
 }

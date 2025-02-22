@@ -1,6 +1,5 @@
 package com.obelix.homework.platform.repo.domain;
 
-import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.domain.entity.CourseSubject;
 import com.obelix.homework.platform.model.domain.entity.Subject;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,9 +10,8 @@ import java.util.UUID;
 
 @Repository
 public interface CourseSubjectRepo extends JpaRepository<CourseSubject, UUID> {
-    List<CourseSubject> findCourseSubjectsByCourse(Course course);
-
     List<CourseSubject> findCourseSubjectsById(UUID id);
 
     List<Subject> getCourseSubjectsById(UUID id);
+
 }

@@ -4,7 +4,6 @@ import com.obelix.homework.platform.model.domain.dto.SubjectDto;
 import com.obelix.homework.platform.model.user.dto.UserDto;
 import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.model.user.entity.Teacher;
-import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 public class SubjectToDtoConverter implements Converter<Subject, SubjectDto> {
     private static final ModelMapper modelMapper = new ModelMapper();
 

@@ -20,7 +20,7 @@ public class Course {
     @OneToMany
     private List<Student> students;
 
-    @OneToMany
+    @Transient
     private List<Subject> subjects;
 
     @OneToMany

@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.admin.controller;
 
-import com.obelix.homework.platform.model.domain.entity.Course;
-import com.obelix.homework.platform.model.domain.entity.Subject;
+import com.obelix.homework.platform.model.domain.dto.CourseDto;
+import com.obelix.homework.platform.model.domain.dto.SubjectDto;
 import com.obelix.homework.platform.web.admin.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,22 +16,22 @@ public class CourseController {
     private final CourseService courseService;
 
     @GetMapping
-    public List<Course> getAllCourses() {
-        return courseService.getAllCourses();
+    public List<CourseDto> getAllCourses() {
+        return courseService.getAllCourseDtos();
     }
 
     @GetMapping("/{id}")
-    public Course getCourse(@PathVariable UUID id) {
-        return courseService.getCourseById(id);
+    public CourseDto getCourse(@PathVariable UUID id) {
+        return courseService.getCourseDtoById(id);
     }
 
     @PostMapping
-    public Course createCourse(@RequestBody String courseName) {
+    public CourseDto createCourse(@RequestBody String courseName) {
         return courseService.createCourse(courseName);
     }
 
     @PostMapping("/bulk")
-    public List<Course> createCourses(@RequestBody List<String> courseNames) {
+    public List<CourseDto> createCourses(@RequestBody List<String> courseNames) {
         return courseService.createCourses(courseNames);
     }
 
@@ -40,28 +40,28 @@ public class CourseController {
         courseService.deleteCourseById(id);
     }
 
-    @PutMapping("/{id}/subjects/{subjectId}")
-    public Course addSubject(@PathVariable UUID id, @PathVariable UUID subjectId) {
+    @PutMapping("/{id}/subjects")
+    public CourseDto addSubject(@PathVariable UUID id, @RequestBody UUID subjectId) {
         return courseService.addSubjectToCourse(id, subjectId);
     }
 
-    @PutMapping("/{id}/subjects")
-    public Course addSubjects(@PathVariable UUID id, @RequestBody List<UUID> subjectIds) {
+    @PutMapping("/{id}/subjects/bulk")
+    public CourseDto addSubjects(@PathVariable UUID id, @RequestBody List<UUID> subjectIds) {
         return courseService.addSubjectsToCourse(id, subjectIds);
     }
 
     @GetMapping("/{id}/subjects")
-    public List<Subject> getSubjectsInCourse(@PathVariable UUID id) {
+    public List<SubjectDto> getSubjectsInCourse(@PathVariable UUID id) {
         return courseService.getSubjectsInCourse(id);
     }
 
     @DeleteMapping("/{id}/subjects/{subjectId}")
-    public Course removeSubject(@PathVariable UUID id, @PathVariable UUID subjectId) {
+    public CourseDto removeSubject(@PathVariable UUID id, @PathVariable UUID subjectId) {
         return courseService.removeSubjectFromCourse(id, subjectId);
     }
 
     @PutMapping("/{id}/subjects/{subjectId}/teachers/{teacherId}")
-    public Course addTeacherToSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @PathVariable UUID teacherId) {
+    public CourseDto addTeacherToSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @PathVariable UUID teacherId) {
         return courseService.addTeacherToSubjectInCourse(id, subjectId, teacherId);
     }
 }

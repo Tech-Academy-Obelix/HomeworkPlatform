@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.user.controller;
 
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
-import com.obelix.homework.platform.model.domain.dto.HomeworkAssingmentDto;
+import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentCreateDto;
 import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
 import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
@@ -25,7 +25,7 @@ public class TeacherController {
     }
 
     @PostMapping("/assignments")
-    public HomeworkAssignment createAssignment(HomeworkAssingmentDto dto) {
+    public HomeworkAssignmentCreateDto createAssignment(@RequestBody HomeworkAssignmentCreateDto dto) {
         return teacherService.createAssignment(dto);
     }
 

@@ -2,12 +2,11 @@ package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.config.exception.CourseNotFoundException;
+import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
-import com.obelix.homework.platform.model.domain.dto.HomeworkAssingmentDto;
-import com.obelix.homework.platform.model.domain.entity.Course;
-import com.obelix.homework.platform.model.domain.entity.Grade;
-import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
-import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
+import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentCreateDto;
+import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.model.domain.entity.*;
 import com.obelix.homework.platform.repo.domain.CourseRepo;
 import com.obelix.homework.platform.repo.domain.GradeRepo;
 import com.obelix.homework.platform.repo.domain.HomeworkAssignmentRepo;
@@ -31,8 +30,8 @@ public class TeacherService {
     private final GradeRepo gradeRepo;
     private final UserService userService;
 
-    public HomeworkAssignment createAssignment(HomeworkAssingmentDto dto) {
-        return homeworkAssignmentRepo.save(modelMapper.map(dto, HomeworkAssignment.class));
+    public HomeworkAssignmentCreateDto createAssignment(HomeworkAssignmentCreateDto dto) {
+        return modelMapper.map(homeworkAssignmentRepo.save(modelMapper.map(dto, HomeworkAssignment.class)), HomeworkAssignmentCreateDto.class);
     }
 
     public List<HomeworkAssignment> getHomeworkAssignments() {
@@ -98,5 +97,12 @@ public class TeacherService {
                 .teacher(userService.getLoggedInTeacher())
                 .subject(assignment.getSubject())
                 .build();
+    }
+
+    private Subject getSubjectById(UUID id) {
+        return userService.getLoggedInTeacher().getSubjects().stream()
+                .filter(subject -> subject.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> new SubjectNotFoundException(id.toString()));
     }
 }
