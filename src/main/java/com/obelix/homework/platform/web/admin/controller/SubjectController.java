@@ -20,7 +20,7 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    public SubjectDto getSubject(@PathVariable UUID id) {
+    public SubjectDto getSubjectById(@PathVariable UUID id) {
         return subjectService.getSubjectById(id);
     }
 
@@ -30,7 +30,7 @@ public class SubjectController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteSubject(@PathVariable UUID id) {
+    public void deleteSubjectById(@PathVariable UUID id) {
         subjectService.deleteSubjectById(id);
     }
 }

@@ -7,6 +7,7 @@ import com.obelix.homework.platform.config.security.role.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service  // Marks this class as a service component for Spring's dependency injection.
@@ -30,7 +31,11 @@ public class InviteCodeService {
     }
 
     // Removes the specified invite code from the repository.
-    public void removeInviteCode(InviteCode inviteCode) {
-        inviteCodeRepo.delete(inviteCode);  // Deletes the given invite code from the repository.
+    public void deleteInviteCodeById(UUID inviteCode) {
+        inviteCodeRepo.deleteById(inviteCode);
+    }
+
+    public List<InviteCode> getAllInviteCodes() {
+        return inviteCodeRepo.findAll();
     }
 }

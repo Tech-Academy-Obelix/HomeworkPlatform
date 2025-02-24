@@ -10,6 +10,7 @@ import com.obelix.homework.platform.model.user.entity.Teacher;
 import com.obelix.homework.platform.model.user.entity.User;
 import com.obelix.homework.platform.repo.user.UserRepo;
 import com.obelix.homework.platform.web.admin.service.InviteCodeService;
+import com.obelix.homework.platform.config.logging.LogService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -44,7 +45,7 @@ public class UserService implements UserDetailsService {
     public User registerUser(RegisterDto user) {
         throwIfUsernameExists(user.getUsername());  // Checks if the username already exists, throws an exception if it does.
         InviteCode inviteCode = inviteCodeService.getInviteCodeById(user.getInviteCode());  // Fetches the invite code using the provided invite code ID.
-        inviteCodeService.removeInviteCode(inviteCode);  // Removes the invite code after it’s used for registration.
+        inviteCodeService.deleteInviteCodeById(inviteCode.getId());  // Removes the invite code after it’s used for registration.
         return userRepo.save(transformUserToSubclass(buildUser(inviteCode, user.getUsername())));
     }
 

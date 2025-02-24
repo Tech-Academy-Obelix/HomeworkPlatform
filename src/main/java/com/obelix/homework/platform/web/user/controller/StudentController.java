@@ -18,11 +18,6 @@ public class StudentController {
     //private static final String UPLOAD_DIRECTORY = System.getProperty("") +"/uploads";;
     private final StudentService studentService;
 
-    @GetMapping
-    public String student() {
-        return "Hello Student";
-    }
-
     @GetMapping("/assignments")
     public List<HomeworkAssignment> getAssignments() {
         return studentService.getAssignments();

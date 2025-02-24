@@ -13,16 +13,10 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/teachers")
+@RequestMapping("/teacher")
 @RequiredArgsConstructor
 public class TeacherController {
-
     private final TeacherService teacherService;
-
-    @GetMapping
-    public String teacher() {
-        return "Hello Teacher";
-    }
 
     @PostMapping("/assignments")
     public HomeworkAssignmentCreateDto createAssignment(@RequestBody HomeworkAssignmentCreateDto dto) {

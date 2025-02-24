@@ -31,8 +31,4 @@ public class AdminService {
     public void deleteUser(UUID id) {
         userRepo.deleteUserById(id);
     }
-
-    public List<String> getAllLogs() {
-        return null;
-    }
 }
