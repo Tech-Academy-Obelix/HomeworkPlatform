@@ -3,14 +3,15 @@ package com.obelix.homework.platform.config.exception.handler;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @Getter
+@RequiredArgsConstructor
 public class ErrorResponse {
-    private LocalDateTime timeStamp;
-    private int status;
-    private String error;
-    private String message;
+    private final LocalDateTime timeStamp = LocalDateTime.now();
+    private final int status;
+    private final String error;
+    private final String message;
 }
