@@ -20,6 +20,8 @@ public class Subject {
 
     private String subjectName;
 
+    private int assignedTeachers;
+
     @ManyToMany
     private List<Teacher> teachers;
 
@@ -28,5 +30,14 @@ public class Subject {
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;
+    }
+
+    public void addTeacher(Teacher teacher) {
+        teachers.add(teacher);
+        assignedTeachers++;
+    }
+
+    public void unassignTeacher() {
+        assignedTeachers--;
     }
 }

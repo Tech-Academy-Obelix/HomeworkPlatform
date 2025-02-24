@@ -2,6 +2,7 @@ package com.obelix.homework.platform.config.mapper.converter;
 
 import com.obelix.homework.platform.model.domain.dto.CourseDto;
 import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.model.domain.dto.SubjectInCourseDto;
 import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.model.user.dto.UserDto;
@@ -25,16 +26,33 @@ public class CourseToDtoConverter implements Converter<Course, CourseDto> {
         return CourseDto.builder()
                 .id(source.getId())
                 .name(source.getCourseName())
-                .subjects(getSubjectDtos(source.getSubjects()))
+                .subjects(getSubjectDtos(source.getSubjects(), source))
                 .students(getStudentDtos(source.getStudents()))
                 .build();
     }
 
+    private List<SubjectInCourseDto> getSubjectDtos(List<Subject> subjects, Course course) {
+        if (subjects == null || subjects.isEmpty()) return null;
+        return subjects.stream().map(subject -> getSubjectDto(subject, course)).collect(Collectors.toList());
+    }
+
+    /*
     private List<SubjectDto> getSubjectDtos(List<Subject> subjects) {
         if (subjects == null || subjects.isEmpty()) return null;
         return subjects.stream()
                 .map(subject -> modelMapper.map(subject, SubjectDto.class))
                 .collect(Collectors.toList());
+    }
+
+     */
+
+    private SubjectInCourseDto getSubjectDto(Subject subject, Course course) {
+        var subjectDto = modelMapper.map(subject, SubjectInCourseDto.class);
+        var teacher = course.getSubjectTeachers().get(subject);
+        if (teacher != null) {
+            subjectDto.setTeacher(modelMapper.map(teacher, UserDto.class));
+        }
+        return subjectDto;
     }
 
     private List<UserDto> getStudentDtos(List<Student> students) {

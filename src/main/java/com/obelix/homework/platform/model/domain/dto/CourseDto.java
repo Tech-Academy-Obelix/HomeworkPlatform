@@ -12,7 +12,7 @@ import java.util.UUID;
 public class CourseDto {
     private UUID id;
     private String name;
-    private List<SubjectDto> subjects;
+    private List<SubjectInCourseDto> subjects;
     private List<UserDto> students;
     private List<HomeworkAssignmentCreateDto> assignments;
 }

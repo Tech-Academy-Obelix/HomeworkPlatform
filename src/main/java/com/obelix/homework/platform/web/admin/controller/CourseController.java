@@ -60,8 +60,13 @@ public class CourseController {
         return courseService.removeSubjectFromCourse(id, subjectId);
     }
 
-    @PutMapping("/{id}/subjects/{subjectId}/teachers/{teacherId}")
-    public CourseDto addTeacherToSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @PathVariable UUID teacherId) {
+    @PutMapping("/{id}/subjects/{subjectId}/teachers")
+    public CourseDto addTeacherToSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @RequestBody UUID teacherId) {
         return courseService.addTeacherToSubjectInCourse(id, subjectId, teacherId);
+    }
+
+    @DeleteMapping("/{id}/subjects/{subjectId}/teachers")
+    public CourseDto removeTeacherFromSubjectInCourse(@PathVariable UUID id, @PathVariable UUID subjectId, @RequestBody UUID teacherId) {
+        return courseService.removeTeacherFromSubjectInCourse(id, subjectId, teacherId);
     }
 }

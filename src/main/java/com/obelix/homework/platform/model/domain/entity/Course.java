@@ -1,12 +1,16 @@
 package com.obelix.homework.platform.model.domain.entity;
 
+import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
 import com.obelix.homework.platform.model.user.entity.Student;
+import com.obelix.homework.platform.model.user.entity.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -20,11 +24,11 @@ public class Course {
     @OneToMany
     private List<Student> students;
 
-    @Transient
+    @ManyToMany
     private List<Subject> subjects;
 
     @OneToMany
-    private List<CourseSubject> courseSubjects;
+    private Map<Subject, Teacher> subjectTeachers;
 
     @OneToMany
     private List<HomeworkAssignment> assignments;
@@ -39,5 +43,17 @@ public class Course {
             sum += student.getAverageGrade();
         }
         return sum / students.size();
+    }
+
+    public Subject getSubjectById(UUID subjectId) {
+        return subjects.stream().filter(subject -> subject.getId().equals(subjectId))
+                .findFirst()
+                .orElseThrow(() -> new SubjectNotFoundException(subjectId.toString()));
+    }
+
+    public void removeSubjectById(UUID subjectId) {
+        subjects.remove(subjects.stream().filter(subject -> subject.getId().equals(subjectId))
+                .findFirst()
+                .orElseThrow(() -> new SubjectNotFoundException(subjectId.toString())));
     }
 }
