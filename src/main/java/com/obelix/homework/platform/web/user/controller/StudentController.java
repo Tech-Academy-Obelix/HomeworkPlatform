@@ -5,6 +5,7 @@ import com.obelix.homework.platform.model.domain.entity.Grade;
 import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
 import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.web.user.service.StudentService;
+import com.obelix.homework.platform.web.user.service.AIGradingAPIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +16,8 @@ import java.util.UUID;
 @RequestMapping("/student")
 @RequiredArgsConstructor
 public class StudentController {
-    //private static final String UPLOAD_DIRECTORY = System.getProperty("") +"/uploads";;
     private final StudentService studentService;
+    private final AIGradingAPIService aiGradingAPIService;
 
     @GetMapping("/assignments")
     public List<HomeworkAssignment> getAssignments() {
@@ -53,18 +54,14 @@ public class StudentController {
         return studentService.getGrades();
     }
 
-    @GetMapping("/uploadimage") public String displayUploadForm() {
-        return "imageupload/index";
+    @PostMapping("/assignments/ai-grade")
+    public String submitForAIAssessment(@RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
+        return aiGradingAPIService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getContent());
     }
 
-    /*
-    @PostMapping("/upload") public String uploadImage(Model model, @RequestParam("image") MultipartFile file) throws IOException, IOException {
-        StringBuilder fileNames = new StringBuilder();
-        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
-        fileNames.append(file.getOriginalFilename());
-        Files.write(fileNameAndPath, file.getBytes());
-        model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
+    @GetMapping("/uploadimage")
+    public String displayUploadForm() {
         return "imageupload/index";
-        }
-     */
+    }
 }
+

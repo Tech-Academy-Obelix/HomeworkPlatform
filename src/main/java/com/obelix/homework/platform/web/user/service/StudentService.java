@@ -44,8 +44,8 @@ public class StudentService {
     public List<SubmittedHomeworkAssignment> submitBulkAssignments(List<SubmittedHomeworkAssignmentDto> submittedHomeworkAssignmentDtos) {
         return submittedHomeworkAssignmentRepo.saveAll(
                 submittedHomeworkAssignmentDtos.stream()
-                .map(this::submitAssignment) // For each DTO, call submitAssignment and map to a Saved Assignment
-                .collect(Collectors.toList())); // Collect the results into a List
+                .map(this::submitAssignment)
+                .collect(Collectors.toList()));
     }
 
     public List<SubmittedHomeworkAssignment> getSubmittedAssignments() {
