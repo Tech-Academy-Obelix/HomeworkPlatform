@@ -56,7 +56,7 @@ public class StudentController {
 
     @PostMapping("/assignments/ai-grade")
     public String submitForAIAssessment(@RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
-        return aiGradingAPIService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getContent());
+        return aiGradingAPIService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getSolution());
     }
 
     @GetMapping("/uploadimage")
