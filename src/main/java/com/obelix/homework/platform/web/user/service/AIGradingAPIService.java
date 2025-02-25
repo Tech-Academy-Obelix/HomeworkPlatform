@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,11 +16,10 @@ public class AIGradingAPIService {
     @Value("${openai.api.key}")
     private String apiKey;
 
-    private final String API_URL = "https://api.openai.com/v1/completions";
+    private final String API_URL = "https://api.openai.com/v1/chat/completions";
 
     public String gradeSubmissionWithAI(String submissionText) {
         RestTemplate restTemplate = new RestTemplate();
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey);
@@ -27,14 +28,26 @@ public class AIGradingAPIService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", "gpt-3.5-turbo");
         requestBody.put("messages", new Object[]{
-                Map.of("role", "system", "content", "You are an AI teacher. Grade assignments from 2 to 6 (Bulgarian scale)."),
+                Map.of("role", "system", "content", "You are a Bulgarian teacher. Grade this assignment from 'Слаб (2)' to 'Отличен (6)' and provide short feedback."),
                 Map.of("role", "user", "content", submissionText)
         });
-        requestBody.put("max_tokens", 100);
+        requestBody.put("max_tokens", 50);
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
         ResponseEntity<String> response = restTemplate.exchange(API_URL, HttpMethod.POST, requestEntity, String.class);
 
-        return response.getBody(); // Return AI response
+        return extractGradeFromResponse(response.getBody());
+    }
+
+
+    private String extractGradeFromResponse(String jsonResponse) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            String aiResponse = rootNode.path("choices").get(0).path("message").path("content").asText();
+            return aiResponse;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

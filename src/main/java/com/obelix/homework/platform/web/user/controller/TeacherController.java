@@ -6,17 +6,22 @@ import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
 import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.web.user.service.TeacherService;
+import com.obelix.homework.platform.web.user.service.AIGradingAPIService;
+import com.obelix.homework.platform.web.user.service.PlagiarismDetectionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/teacher")
 @RequiredArgsConstructor
 public class TeacherController {
     private final TeacherService teacherService;
+    private final AIGradingAPIService aiGradingAPIService;
+    private final PlagiarismDetectionService plagiarismDetectionService;
 
     @PostMapping("/assignments")
     public HomeworkAssignmentCreateDto createAssignment(@RequestBody HomeworkAssignmentCreateDto dto) {
@@ -47,6 +52,7 @@ public class TeacherController {
     public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID id) {
         return teacherService.getSubmittedAssignmentById(id);
     }
+
     @PostMapping("/submitted-assignments/{id}")
     public SubmittedHomeworkAssignment gradeSubmittedAssignments(@PathVariable UUID id, @RequestBody GradeDto grade){
         return teacherService.gradeSubmittedAssignment(id, grade);
@@ -62,7 +68,35 @@ public class TeacherController {
         return teacherService.getCourseById(id);
     }
 
+    @GetMapping("/submitted-assignments/{id}/ai-grade")
+    public String suggestGradeWithAI(@PathVariable UUID id) {
+        // 1️⃣ Fetch the submission by ID
+        SubmittedHomeworkAssignment submission = teacherService.getSubmittedAssignmentById(id);
 
+        if (submission == null) {
+            return "Submission not found!";
+        }
 
+        String aiSuggestedGrade = aiGradingAPIService.gradeSubmissionWithAI(submission.getSolution());
+
+        return String.format("AI Suggests: %s. Teacher must finalize the grade.", aiSuggestedGrade);
+    }
+
+    @GetMapping("/submitted-assignments/{id}/plagiarism-check")
+    public String checkPlagiarism(@PathVariable UUID id) {
+        // 1️⃣ Fetch the current submission
+        SubmittedHomeworkAssignment submission = teacherService.getSubmittedAssignmentById(id);
+        if (submission == null) {
+            return "Submission not found!";
+        }
+
+        List<String> existingSubmissions = teacherService.getSubmittedHomeworkAssignments().stream()
+                .filter(s -> !s.getId().equals(id))
+                .map(SubmittedHomeworkAssignment::getSolution)
+                .collect(Collectors.toList());
+
+        double similarityScore = plagiarismDetectionService.checkPlagiarism(submission.getSolution(), existingSubmissions);
+
+        return String.format("Plagiarism detected: %.2f%% similarity. Teacher must decide if it's acceptable.", similarityScore * 100);
+    }
 }
-

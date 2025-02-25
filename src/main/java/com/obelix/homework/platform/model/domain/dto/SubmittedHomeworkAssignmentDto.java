@@ -8,4 +8,8 @@ import java.util.UUID;
 public class SubmittedHomeworkAssignmentDto {
     private UUID id;
     private String solution;
+
+    public String getContent() {
+        return "";
+    }
 }
