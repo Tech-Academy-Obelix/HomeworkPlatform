@@ -28,6 +28,7 @@ public class SecurityConfig {
                         .requestMatchers("/student/**").hasAnyAuthority(Role.ROLE_STUDENT.toString())
                         .requestMatchers("/teacher/**").hasAnyAuthority(Role.ROLE_TEACHER.toString())
                         .requestMatchers("/admin/**").hasAnyAuthority(Role.ROLE_ADMIN.toString())
+                        .requestMatchers("/user/**").hasAnyAuthority(Role.ROLE_ADMIN.toString(), Role.ROLE_STUDENT.toString(), Role.ROLE_TEACHER.toString())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
