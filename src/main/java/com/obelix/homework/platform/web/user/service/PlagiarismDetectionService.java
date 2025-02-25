@@ -39,3 +39,4 @@ public class PlagiarismDetectionService {
         return (double) commonChars / Math.max(text1.length(), text2.length());
     }
 }
+

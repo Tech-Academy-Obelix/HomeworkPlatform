@@ -70,7 +70,6 @@ public class TeacherController {
 
     @GetMapping("/submitted-assignments/{id}/ai-grade")
     public String suggestGradeWithAI(@PathVariable UUID id) {
-        // 1️⃣ Fetch the submission by ID
         SubmittedHomeworkAssignment submission = teacherService.getSubmittedAssignmentById(id);
 
         if (submission == null) {
@@ -84,7 +83,6 @@ public class TeacherController {
 
     @GetMapping("/submitted-assignments/{id}/plagiarism-check")
     public String checkPlagiarism(@PathVariable UUID id) {
-        // 1️⃣ Fetch the current submission
         SubmittedHomeworkAssignment submission = teacherService.getSubmittedAssignmentById(id);
         if (submission == null) {
             return "Submission not found!";
@@ -100,3 +98,4 @@ public class TeacherController {
         return String.format("Plagiarism detected: %.2f%% similarity. Teacher must decide if it's acceptable.", similarityScore * 100);
     }
 }
+

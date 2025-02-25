@@ -64,3 +64,4 @@ public class StudentController {
         return "imageupload/index";
     }
 }
+

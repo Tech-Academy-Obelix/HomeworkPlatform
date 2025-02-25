@@ -48,3 +48,4 @@ public class AIAutoGradingService {
         return 2.00;
     }
 }
+
