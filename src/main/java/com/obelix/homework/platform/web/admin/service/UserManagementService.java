@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserManagementService {
     private final UserRepo userRepo;
     private final ModelMapper modelMapper;
@@ -46,7 +47,6 @@ public class UserManagementService {
         return userRepo.save(user);
     }
 
-    @Transactional
     public void deleteUser(UUID id) {
         userRepo.deleteById(id);
     }

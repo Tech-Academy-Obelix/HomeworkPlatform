@@ -4,6 +4,7 @@ import com.obelix.homework.platform.model.domain.dto.CourseManagementDto;
 import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.user.dto.TeacherDto;
 import com.obelix.homework.platform.model.user.entity.Teacher;
+import jakarta.transaction.Transactional;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;

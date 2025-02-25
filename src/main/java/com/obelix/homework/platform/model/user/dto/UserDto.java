@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.model.user.dto;
 
+import com.obelix.homework.platform.config.security.role.Role;
 import com.obelix.homework.platform.model.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private String email;
+    private Role role;
 
     public UserDto(User user) {
         this.setId(user.getId());

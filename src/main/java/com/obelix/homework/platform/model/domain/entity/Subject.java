@@ -9,6 +9,7 @@ import org.springframework.security.core.parameters.P;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +27,8 @@ public class Subject {
     private List<Teacher> teachers;
 
     @ElementCollection
-    private HashMap<Teacher, Integer> coursesPerTeacher;
+    @CollectionTable
+    private Map<Teacher, Integer> coursesPerTeacher;
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;
