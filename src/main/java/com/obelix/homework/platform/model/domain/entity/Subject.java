@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,24 +22,37 @@ public class Subject {
 
     private String subjectName;
 
-    private int assignedTeachers;
-
     @ManyToMany
     private List<Teacher> teachers;
 
-    @OneToMany
-    private List<CourseSubject> courseSubjects;
+    @ElementCollection
+    private HashMap<Teacher, Integer> coursesPerTeacher;
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;
     }
 
     public void addTeacher(Teacher teacher) {
-        teachers.add(teacher);
-        assignedTeachers++;
+        if (!teachers.contains(teacher)) {
+            teachers.add(teacher);
+        }
+        incrementCoursesForTeacher(teacher);
     }
 
-    public void unassignTeacher() {
-        assignedTeachers--;
+    public void removeTeacher(Teacher teacher) {
+        if (coursesPerTeacher.get(teacher) > 0) {
+            decrementCoursesForTeacher(teacher);
+        }
+        if (coursesPerTeacher.get(teacher) <= 0) {
+            teachers.remove(teacher);
+        }
+    }
+
+    private void incrementCoursesForTeacher(Teacher teacher) {
+        coursesPerTeacher.put(teacher, coursesPerTeacher.getOrDefault(teacher, 0) + 1);
+    }
+
+    private void decrementCoursesForTeacher(Teacher teacher) {
+        coursesPerTeacher.put(teacher, coursesPerTeacher.get(teacher) - 1);
     }
 }

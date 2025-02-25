@@ -3,6 +3,7 @@ package com.obelix.homework.platform.web.user.controller;
 import com.obelix.homework.platform.config.security.JwtUtils;
 import com.obelix.homework.platform.model.core.dto.RegisterDto;
 import com.obelix.homework.platform.config.security.role.Role;
+import com.obelix.homework.platform.model.user.dto.UserDto;
 import com.obelix.homework.platform.web.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,7 +46,7 @@ public class AuthenticationController {
 
     // This method will handle registration requests. The body of the request should contain user details (username, password).
     @PostMapping("/register")
-    public User register(@RequestBody RegisterDto user) {
+    public UserDto register(@RequestBody RegisterDto user) {
         return userService.registerUser(user);  // Registers the user with the provided user details
     }
 }

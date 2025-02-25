@@ -1,7 +1,8 @@
 package com.obelix.homework.platform.web.admin.controller;
 
+import com.obelix.homework.platform.model.user.dto.UserDto;
 import com.obelix.homework.platform.model.user.entity.User;
-import com.obelix.homework.platform.web.admin.service.AdminService;
+import com.obelix.homework.platform.web.admin.service.UserManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,20 +13,20 @@ import java.util.UUID;
 @RequestMapping("/admin/users")
 @RequiredArgsConstructor
 public class UserManagementController {
-    private final AdminService adminService;
+    private final UserManagementService userManagementService;
 
     @GetMapping
-    public List<User> getAllUsers(){
-        return adminService.getAllUsers();
+    public List<UserDto> getAllUsers(){
+        return userManagementService.getAllUsers();
     }
 
     @PutMapping("/{id}")
     public User updateUserRole(@PathVariable UUID id, @RequestBody String roleName) {
-        return adminService.updateUserRole(id, roleName);
+        return userManagementService.updateUserRole(id, roleName);
     }
 
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable UUID id) {
-        adminService.deleteUser(id);
+        userManagementService.deleteUser(id);
     }
 }

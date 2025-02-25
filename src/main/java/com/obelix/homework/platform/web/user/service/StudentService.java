@@ -67,6 +67,4 @@ public class StudentService {
     public void init() {
         student = (Student) userService.getLoggedInUser();
     }
-
-
 }

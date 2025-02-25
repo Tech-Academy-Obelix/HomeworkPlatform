@@ -1,9 +1,6 @@
 package com.obelix.homework.platform.config.mapper;
 
-import com.obelix.homework.platform.config.mapper.converter.CourseToDtoConverter;
-import com.obelix.homework.platform.config.mapper.converter.DtoToHomeworkAssignmentConverter;
-import com.obelix.homework.platform.config.mapper.converter.HomeworkAssignmentToDtoConverter;
-import com.obelix.homework.platform.config.mapper.converter.SubjectToDtoConverter;
+import com.obelix.homework.platform.config.mapper.converter.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
@@ -18,12 +15,17 @@ public class ModelMapperConfig {
     private final SubjectToDtoConverter subjectToDtoConverter;
     private final HomeworkAssignmentToDtoConverter homeworkAssignmentToDtoConverter;
     private final CourseToDtoConverter courseToDtoConverter;
+    private final StudentToDtoConverter studentToDtoConverter;
+    private final TeacherToDtoConverter teacherToDtoConverter;
     @Bean
     public ModelMapper modelMapper() {
         modelMapper.addConverter(dtoToHomeworkAssignmentConverter);
         modelMapper.addConverter(subjectToDtoConverter);
         modelMapper.addConverter(homeworkAssignmentToDtoConverter);
         modelMapper.addConverter(courseToDtoConverter);
+        modelMapper.addConverter(subjectToDtoConverter);
+        modelMapper.addConverter(studentToDtoConverter);
+        modelMapper.addConverter(teacherToDtoConverter);
         return modelMapper;
     }
 }

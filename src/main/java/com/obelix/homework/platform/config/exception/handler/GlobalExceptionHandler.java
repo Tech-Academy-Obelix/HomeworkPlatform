@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -56,6 +57,19 @@ public class GlobalExceptionHandler {
         var status = HttpStatus.CONFLICT.value();
         return ResponseEntity.status(status)
                 .body(new ErrorResponse(status, SubjectHasAssignedTeacherException.ERROR, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InviteCodeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleInviteCodeNotFoundException(InviteCodeNotFoundException ex) {
+        var status = HttpStatus.NOT_FOUND.value();
+        return ResponseEntity.status(status)
+                .body(new ErrorResponse(status, InviteCodeNotFoundException.ERROR, ex.getMessage()));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
+        var status = HttpStatus.NOT_FOUND.value();
+        return ResponseEntity.status(status).body(new ErrorResponse(status, "Page Not Found", "This page doesn't seem to exist"));
     }
 
     @ExceptionHandler(Exception.class)

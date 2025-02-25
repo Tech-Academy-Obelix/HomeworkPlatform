@@ -1,6 +1,7 @@
 package com.obelix.homework.platform.web.admin.controller;
 
 import com.obelix.homework.platform.model.core.dto.InviteCodeDto;
+import com.obelix.homework.platform.model.core.entity.InviteCode;
 import com.obelix.homework.platform.web.admin.service.InviteCodeService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,16 +13,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/invite-code")
+@RequestMapping("/admin/invite-codes")
 public class InviteCodeController {
     private final InviteCodeService inviteCodeService;
-    private final ModelMapper modelMapper;
 
     @GetMapping()
-    public List<InviteCodeDto> getInviteCodes() {
-        return inviteCodeService.getAllInviteCodes().stream()
-                .map(code -> modelMapper.map(code, InviteCodeDto.class))
-                .collect(Collectors.toList());
+    public List<InviteCode> getInviteCodes() {
+        return inviteCodeService.getAllInviteCodes();
     }
 
     @PostMapping

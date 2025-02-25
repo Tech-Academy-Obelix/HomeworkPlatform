@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class InviteCodeDto {
-    String roleName;
-    String emailAssociated;
+    String role;
+    String associatedEmail;
 }
