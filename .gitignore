@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### AI API key ###
+/src/main/resources/ai-api-key.properties
