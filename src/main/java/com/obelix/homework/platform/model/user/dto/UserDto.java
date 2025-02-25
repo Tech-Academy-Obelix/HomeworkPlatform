@@ -27,5 +27,6 @@ public class UserDto {
         this.setFirstName(user.getFirstName());
         this.setLastName(user.getLastName());
         this.setEmail(user.getEmail());
+        this.setRole(user.getRole());
     }
 }

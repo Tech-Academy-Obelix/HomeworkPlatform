@@ -22,7 +22,7 @@ public class InviteCodeService {
         // Saves the invite code entity with the specified role and associated email, and returns its UUID.
         return inviteCodeRepo.save(InviteCode.builder()
                 .role(Role.fromString(inviteCodeDto.getRole()))  // Sets the role of the invite code (converted to String).
-                .associatedEmail(inviteCodeDto.getAssociatedEmail())  // Sets the associated email.
+                .associatedEmail(inviteCodeDto.getEmail())  // Sets the associated email.
                 .build()).getId().toString();  // Returns the ID of the saved invite code.
     }
 

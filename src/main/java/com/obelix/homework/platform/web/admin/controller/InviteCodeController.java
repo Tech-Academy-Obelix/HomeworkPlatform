@@ -3,6 +3,7 @@ package com.obelix.homework.platform.web.admin.controller;
 import com.obelix.homework.platform.model.core.dto.InviteCodeDto;
 import com.obelix.homework.platform.model.core.entity.InviteCode;
 import com.obelix.homework.platform.web.admin.service.InviteCodeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class InviteCodeController {
     }
 
     @PostMapping
-    public String grantInviteCode(@RequestBody InviteCodeDto inviteCodeDto) {
+    public String grantInviteCode(@Valid @RequestBody InviteCodeDto inviteCodeDto) {
         // Calls the service to grant an invite code based on the role and email, then returns the result as a string.
         return inviteCodeService.grantInviteCode(inviteCodeDto);
     }

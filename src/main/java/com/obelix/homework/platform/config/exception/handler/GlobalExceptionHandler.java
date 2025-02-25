@@ -4,6 +4,7 @@ import com.obelix.homework.platform.config.exception.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -67,15 +68,24 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException ex) {
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException() {
         var status = HttpStatus.NOT_FOUND.value();
-        return ResponseEntity.status(status).body(new ErrorResponse(status, "Page Not Found", "This page doesn't seem to exist"));
+        return ResponseEntity.status(status)
+                .body(new ErrorResponse(status, "Page Not Found", "This page doesn't seem to exist"));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        var status = HttpStatus.BAD_REQUEST.value();
+        return ResponseEntity.status(status)
+                .body(new ErrorResponse(status, "Invalid Request", ex.getBindingResult().getAllErrors().getFirst().getDefaultMessage()));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
         var status = HttpStatus.INTERNAL_SERVER_ERROR.value();
         LoggerFactory.getLogger(GlobalExceptionHandler.class).error(ex.getMessage(), ex);
-        return ResponseEntity.status(status).body(new ErrorResponse(status, "Internal Server Error", "Oopsie, something went wrong :("));
+        return ResponseEntity.status(status)
+                .body(new ErrorResponse(status, "Internal Server Error", "Oopsie, something went wrong :("));
     }
 }
