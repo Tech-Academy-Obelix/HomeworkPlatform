@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.user.controller;
 
+import com.obelix.homework.platform.config.logging.LogService;
 import com.obelix.homework.platform.web.user.service.FileStorageService;
-import com.obelix.homework.platform.web.user.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
