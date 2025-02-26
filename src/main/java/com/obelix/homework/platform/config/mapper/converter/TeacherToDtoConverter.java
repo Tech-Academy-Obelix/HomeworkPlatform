@@ -1,10 +1,9 @@
 package com.obelix.homework.platform.config.mapper.converter;
 
-import com.obelix.homework.platform.model.domain.dto.CourseManagementDto;
+import com.obelix.homework.platform.model.domain.dto.CourseDto;
 import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.user.dto.TeacherDto;
 import com.obelix.homework.platform.model.user.entity.Teacher;
-import jakarta.transaction.Transactional;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
@@ -27,9 +26,10 @@ public class TeacherToDtoConverter implements Converter<Teacher, TeacherDto> {
         return dto;
     }
 
-    private List<CourseManagementDto> getCourseDtos(List<Course> courses) {
+    private List<CourseDto> getCourseDtos(List<Course> courses) {
+        if (courses == null) return null;
         return courses.stream()
-                .map(course -> modelMapper.map(course, CourseManagementDto.class))
+                .map(course -> modelMapper.map(course, CourseDto.class))
                 .collect(Collectors.toList());
     }
 }

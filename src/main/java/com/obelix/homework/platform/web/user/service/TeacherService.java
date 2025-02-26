@@ -1,92 +1,100 @@
 package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
-import com.obelix.homework.platform.config.exception.CourseNotFoundException;
-import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
 import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentCreateDto;
-import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.model.domain.dto.CourseDto;
+import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentResponseDto;
+import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
 import com.obelix.homework.platform.model.domain.entity.*;
-import com.obelix.homework.platform.repo.domain.CourseRepo;
-import com.obelix.homework.platform.repo.domain.GradeRepo;
-import com.obelix.homework.platform.repo.domain.HomeworkAssignmentRepo;
-import com.obelix.homework.platform.repo.domain.SubmittedHomeworkAssignmentRepo;
+import com.obelix.homework.platform.model.user.entity.Teacher;
+import com.obelix.homework.platform.repo.domain.*;
+import com.obelix.homework.platform.repo.user.UserRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class TeacherService {
-    private final HomeworkAssignmentRepo homeworkAssignmentRepo;
     private final ModelMapper modelMapper;
-    private final CourseRepo courseRepo;
     private final SubmittedHomeworkAssignmentRepo submittedHomeworkAssignmentRepo;
+    private final HomeworkAssignmentRepo homeworkAssignmentRepo;
     private final GradeRepo gradeRepo;
     private final UserService userService;
+    private final UserRepo userRepo;
 
-    public HomeworkAssignmentCreateDto createAssignment(HomeworkAssignmentCreateDto dto) {
-        return modelMapper.map(homeworkAssignmentRepo.save(modelMapper.map(dto, HomeworkAssignment.class)), HomeworkAssignmentCreateDto.class);
-    }
-
-    public List<HomeworkAssignment> getHomeworkAssignments() {
-        return userService.getLoggedInTeacher().getCourses().stream()
-                .flatMap(course -> course.getAssignments().stream())
+    public List<CourseDto> getCourses() {
+        return teacher().getCourses().stream()
+                .map(c -> modelMapper.map(c, CourseDto.class))
                 .collect(Collectors.toList());
     }
 
-    public HomeworkAssignment getAssignment(UUID id) {
-        return userService.getLoggedInTeacher().getCourses().stream()
-                .flatMap(course -> course.getAssignments().stream())
-                .filter(assignment -> assignment.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
+    public CourseDto getCourseById(UUID id) {
+        return modelMapper.map(teacher().getCourseById(id), CourseDto.class);
     }
 
-    public List<HomeworkAssignment> assignAssignmentToCourse(UUID id, UUID courseId) {
-        var course = getCourseById(courseId);
-        course.getAssignments().add(getAssignment(id));
-        return courseRepo.save(course).getAssignments();
+    public List<SubjectDto> getAllSubjectsInCourse(UUID id) {
+        var teacher = teacher();
+        return teacher.getCourseById(id).getSubjectTeachers().entrySet().stream()
+                .filter(entry -> entry.getValue().equals(teacher))
+                .map(entry -> modelMapper.map(entry.getKey(), SubjectDto.class))
+                .collect(Collectors.toList());
     }
 
-    public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignments() {
-            return userService.getLoggedInTeacher().getCourses().stream()
-                    .flatMap(course -> course.getStudents().stream()
-                            .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()))
-                    .collect(Collectors.toList());
+    public HomeworkAssignmentResponseDto createAssignment(HomeworkAssignmentCreateDto dto) {
+        var teacher = teacher();
+        var assignment = modelMapper.map(dto, HomeworkAssignment.class);
+        teacher.addAssignment(homeworkAssignmentRepo.save(assignment));
+        userRepo.save(teacher);
+        return modelMapper.map(assignment, HomeworkAssignmentResponseDto.class);
+    }
+
+    public List<HomeworkAssignmentResponseDto> getAssignments() {
+        return teacher().getAssignments().stream()
+                .map(assignmentDto -> modelMapper.map(assignmentDto, HomeworkAssignmentResponseDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public HomeworkAssignmentResponseDto getAssignmentById(UUID id) {
+        return modelMapper.map(teacher().getAssignmentById(id), HomeworkAssignmentResponseDto.class);
+    }
+
+    public void deleteAssignmentById(UUID id) {
+        var teacher = teacher();
+        teacher.removeAssignmentById(id);
+        userRepo.save(teacher);
+    }
+
+    public SubjectDto assignAssignmentToSubjectInCourse(UUID courseId, UUID subjectId, UUID assignmentId) {
+        var teacher = teacher();
+        var course = teacher.getCourseById(courseId);
+        course.assignAssignmentToSubjectById(subjectId, teacher.getAssignmentById(assignmentId));
+        userRepo.save(teacher);
+        return modelMapper.map(course.getSubjectById(subjectId), SubjectDto.class);
+    }
+
+    public List<SubmittedHomeworkAssignment> getSubmittedAssignmentsInCourseBySubjectId(UUID courseId, UUID subjectId) {
+            return teacher().getCourseById(courseId).getSubmittedHomeworkAssignmentsBySubjectId(subjectId);
         }
 
-    public SubmittedHomeworkAssignment getSubmittedAssignmentById(UUID id) {
-        return userService.getLoggedInTeacher().getCourses().stream()
-                .flatMap(course -> course.getStudents().stream()
-                        .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()))
-                .filter(assignment -> assignment.getId().equals(id))
+    public SubmittedHomeworkAssignment getSubmittedAssignmentInCourseInSubjectById(UUID courseId, UUID subjectId, UUID assignmentId) {
+        return getSubmittedAssignmentsInCourseBySubjectId(courseId, subjectId).stream()
+                .filter(assignment -> assignment.getId().equals(assignmentId))
                 .findFirst()
-                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
+                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
     }
 
-    public SubmittedHomeworkAssignment gradeSubmittedAssignment(UUID id, GradeDto gradeDto) {
-        var assignment = getSubmittedAssignmentById(id);
+    public SubmittedHomeworkAssignment gradeSubmittedAssignment(UUID courseId, UUID subjectId, UUID assignmentId, GradeDto gradeDto) {
+        var assignment = getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId);
         assignment.setGrade(gradeRepo.save(buildGrade(assignment)));
         assignment.setTeacherComment(gradeDto.getTeacherComment());
         return submittedHomeworkAssignmentRepo.save(assignment);
-    }
-
-    public List<Course> getCourses() {
-        return userService.getLoggedInTeacher().getCourses();
-    }
-
-    public Course getCourseById(UUID id) {
-        return userService.getLoggedInTeacher().getCourses().stream()
-                .filter(course -> course.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new CourseNotFoundException(id.toString()));
-
     }
 
     private Grade buildGrade(SubmittedHomeworkAssignment assignment){
@@ -94,15 +102,12 @@ public class TeacherService {
                 .grade(0)
                 .timestamp(new Date())
                 .student(assignment.getStudent())
-                .teacher(userService.getLoggedInTeacher())
+                .teacher(teacher())
                 .subject(assignment.getSubject())
                 .build();
     }
 
-    private Subject getSubjectById(UUID id) {
-        return userService.getLoggedInTeacher().getSubjects().stream()
-                .filter(subject -> subject.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new SubjectNotFoundException(id.toString()));
+    private Teacher teacher() {
+        return userService.getLoggedInTeacher();
     }
 }

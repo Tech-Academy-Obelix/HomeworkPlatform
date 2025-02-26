@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -20,22 +21,19 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private String courseName;
+    private String name;
 
-    @OneToMany
-    private List<Student> students;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Subject> subjects;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Student> students;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private Map<Subject, Teacher> subjectTeachers;
 
-    @OneToMany
-    private List<HomeworkAssignment> assignments;
-
-    public Course(String courseName) {
-        this.courseName = courseName;
+    public Course(String name) {
+        this.name = name;
     }
 
     public Double getAverageGrade() {
@@ -45,6 +43,17 @@ public class Course {
             sum += grade == null ? 0 : grade;
         }
         return sum / students.size();
+    }
+
+    public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignmentsBySubjectId(UUID subjectId) {
+        return students.stream()
+                .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()
+                        .filter(assignment -> assignment.getSubject().getId().equals(subjectId)))
+                .collect(Collectors.toList());
+    }
+
+    public void assignAssignmentToSubjectById(UUID subjectId, HomeworkAssignment assignment) {
+        getSubjectById(subjectId).addAssignment(assignment);
     }
 
     public Subject getSubjectById(UUID subjectId) {
@@ -60,14 +69,19 @@ public class Course {
     public void addTeacherToSubject(Teacher teacher, UUID subjectId) {
         var subject = getSubjectById(subjectId);
         throwIfTeacherAssigned(subject);
+        teacher.getCourses().add(this);
         subjectTeachers.put(subject, teacher);
         subject.addTeacher(teacher);
     }
 
     public void removeTeacherFromSubject(UUID teacherId, UUID subjectId) {
         var subject = getSubjectById(subjectId);
+        var teacher = getTeacherById(teacherId);
         subjectTeachers.remove(subject);
-        subject.removeTeacher(getTeacherById(teacherId));
+        subject.removeTeacher(teacher);
+        if (!subjectTeachers.containsValue(teacher)) {
+            teacher.getCourses().remove(this);
+        }
     }
 
     public void addStudent(Student student) {
@@ -100,6 +114,4 @@ public class Course {
             throw new SubjectHasAssignedTeacherException(subject.getId().toString());
         }
     }
-
-
 }

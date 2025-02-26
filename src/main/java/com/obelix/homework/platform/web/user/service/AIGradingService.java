@@ -11,8 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class AIGradingAPIService {
-
+public class AIGradingService {
     @Value("${openai.api.key}")
     private String apiKey;
 

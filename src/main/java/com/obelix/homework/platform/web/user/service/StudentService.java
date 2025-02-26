@@ -27,7 +27,7 @@ public class StudentService {
     public List<HomeworkAssignment> getAssignments() {
         return student.getHomeworkAssignments();
     }
-
+/*
     public HomeworkAssignment getAssignment(UUID id) {
         return student.getCourse().getAssignments().stream()
                 .filter(assignment -> assignment.getId().equals(id))
@@ -67,4 +67,6 @@ public class StudentService {
     public void init() {
         student = (Student) userService.getLoggedInUser();
     }
+
+ */
 }

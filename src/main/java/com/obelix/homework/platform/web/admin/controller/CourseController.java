@@ -1,7 +1,7 @@
 package com.obelix.homework.platform.web.admin.controller;
 
 import com.obelix.homework.platform.model.domain.dto.CourseDto;
-import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.model.domain.dto.subject.SubjectInCourseDto;
 import com.obelix.homework.platform.model.user.dto.UserDto;
 import com.obelix.homework.platform.web.admin.service.CourseService;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}/subjects")
-    public List<SubjectDto> getSubjectsInCourse(@PathVariable UUID id) {
+    public List<SubjectInCourseDto> getSubjectsInCourse(@PathVariable UUID id) {
         return courseService.getSubjectsInCourse(id);
     }
 

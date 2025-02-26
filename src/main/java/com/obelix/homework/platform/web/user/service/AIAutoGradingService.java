@@ -6,15 +6,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AIAutoGradingService {
-
-    private final AIGradingAPIService aiGradingAPIService;
+    private final AIGradingService aiGradingService;
 
     public double gradeSubmission(String submissionText) {
         if (submissionText == null || submissionText.trim().isEmpty()) {
             return 2.00;
         }
 
-        String aiGrade = aiGradingAPIService.gradeSubmissionWithAI(submissionText);
+        String aiGrade = aiGradingService.gradeSubmissionWithAI(submissionText);
         double numericGrade = parseBulgarianGrade(aiGrade);
 
         if (numericGrade != 0.0) {

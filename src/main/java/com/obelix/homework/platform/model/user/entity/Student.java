@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -39,7 +40,9 @@ public class Student extends User {
 
     public List<HomeworkAssignment> getHomeworkAssignments() {
         if (course == null) return null;
-        return course.getAssignments();
+        return course.getSubjects().stream()
+                .flatMap(subject -> subject.getAssignments().stream()) // Flatten the stream
+                .collect(Collectors.toList()); // Collect into a single list
     }
 
     public Student(User user) {

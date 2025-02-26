@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.config.mapper.converter;
 
-import com.obelix.homework.platform.model.domain.dto.CourseManagementDto;
+import com.obelix.homework.platform.model.domain.dto.CourseDto;
 import com.obelix.homework.platform.model.user.dto.StudentDto;
 import com.obelix.homework.platform.model.user.entity.Student;
 import org.modelmapper.Converter;
@@ -18,7 +18,7 @@ public class StudentToDtoConverter implements Converter<Student, StudentDto> {
         var dto = new StudentDto(source);
         var course = source.getCourse();
         if (course != null) {
-            dto.setCourse(modelMapper.map(course, CourseManagementDto.class));
+            dto.setCourse(modelMapper.map(course, CourseDto.class));
         }
         return dto;
     }

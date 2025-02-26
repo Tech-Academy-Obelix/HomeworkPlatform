@@ -9,21 +9,20 @@ import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class DtoToHomeworkAssignmentConverter implements Converter<HomeworkAssignmentCreateDto, HomeworkAssignment> {
-    private final SubjectRepo subjectRepo;
-
     @Override
     public HomeworkAssignment convert(MappingContext<HomeworkAssignmentCreateDto, HomeworkAssignment> mappingContext) {
         var source = mappingContext.getSource();
         return HomeworkAssignment.builder()
-                .assignmentName(source.getAssignmentName())
-                .assignmentDescription(source.getAssignmentDescription())
+                .name(source.getName())
+                .description(source.getDescription())
                 .assignmentDate(new Date())
                 .dueDate(source.getDueDate())
-                .subject(subjectRepo.getSubjectById(source.getSubjectId()))
+                //.subject(subjectRepo.getSubjectById(source.getSubjectId()))
                 .build();
 
     }

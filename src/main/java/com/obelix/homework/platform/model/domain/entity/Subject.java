@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.model.domain.entity;
 
+import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.model.user.entity.Teacher;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,15 +24,33 @@ public class Subject {
 
     private String subjectName;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Teacher> teachers;
 
-    @ElementCollection
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<HomeworkAssignment> assignments;
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable
     private Map<Teacher, Integer> coursesPerTeacher;
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;
+    }
+
+    public HomeworkAssignment getAssignmentById(UUID assignmentId) {
+        return assignments.stream()
+                .filter(assignment -> assignment.getId().equals(assignmentId))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
+    }
+
+    public void addAssignment(HomeworkAssignment assignment) {
+        assignments.add(assignment);
+    }
+
+    public void removeAssignmentById(UUID assignmentId) {
+        assignments.remove(getAssignmentById(assignmentId));
     }
 
     public void addTeacher(Teacher teacher) {

@@ -15,11 +15,11 @@ import java.util.UUID;
 @Setter
 public class UserDto {
     private UUID id;
+    private Role role;
+    private String email;
     private String username;
     private String firstName;
     private String lastName;
-    private String email;
-    private Role role;
 
     public UserDto(User user) {
         this.setId(user.getId());

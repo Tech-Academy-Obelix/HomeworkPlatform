@@ -1,24 +1,18 @@
 package com.obelix.homework.platform.web.user.controller;
 
 import com.obelix.homework.platform.model.domain.dto.SubmittedHomeworkAssignmentDto;
-import com.obelix.homework.platform.model.domain.entity.Grade;
-import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
-import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
 import com.obelix.homework.platform.web.user.service.StudentService;
-import com.obelix.homework.platform.web.user.service.AIGradingAPIService;
+import com.obelix.homework.platform.web.user.service.AIGradingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
-    private final AIGradingAPIService aiGradingAPIService;
-
+    private final AIGradingService aiGradingService;
+/*
     @GetMapping("/assignments")
     public List<HomeworkAssignment> getAssignments() {
         return studentService.getAssignments();
@@ -53,10 +47,11 @@ public class StudentController {
     public List<Grade> getGrades() {
         return studentService.getGrades();
     }
+    */
 
     @PostMapping("/assignments/ai-grade")
     public String submitForAIAssessment(@RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
-        return aiGradingAPIService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getSolution());
+        return aiGradingService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getSolution());
     }
 
     @GetMapping("/uploadimage")

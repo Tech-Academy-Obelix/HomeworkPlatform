@@ -4,7 +4,7 @@ import com.obelix.homework.platform.config.exception.CourseNotFoundException;
 import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
 import com.obelix.homework.platform.config.exception.UserNotFoundException;
 import com.obelix.homework.platform.model.domain.dto.CourseDto;
-import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.model.domain.dto.subject.SubjectInCourseDto;
 import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.model.user.dto.UserDto;
@@ -73,9 +73,9 @@ public class CourseService {
                 .orElseThrow(NullPointerException::new);
     }
 
-    public List<SubjectDto> getSubjectsInCourse(UUID courseId) {
+    public List<SubjectInCourseDto> getSubjectsInCourse(UUID courseId) {
         return getCourseFromRepoById(courseId).getSubjects().stream()
-                .map(subject -> modelMapper.map(subject, SubjectDto.class))
+                .map(subject -> modelMapper.map(subject, SubjectInCourseDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -133,4 +133,5 @@ public class CourseService {
     private Subject getSubjectFromRepoById(UUID subjectId) {
         return subjectRepo.findById(subjectId).orElseThrow(() -> new SubjectNotFoundException(subjectId.toString()));
     }
+
 }
