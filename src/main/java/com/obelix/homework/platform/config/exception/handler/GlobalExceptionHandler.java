@@ -1,16 +1,15 @@
 package com.obelix.homework.platform.config.exception.handler;
 
 import com.obelix.homework.platform.config.exception.*;
-import com.obelix.homework.platform.web.user.service.LogService;
-import lombok.RequiredArgsConstructor;
+import com.obelix.homework.platform.config.exception.NullPointerException;
+import com.obelix.homework.platform.config.exception.SecurityException;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Arrays;
-import java.util.logging.Logger;
+import java.io.FileNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -63,6 +62,30 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(status, SubjectHasAssignedTeacherException.ERROR, ex.getMessage()));
     }
 
+//    @ExceptionHandler(NullPointerException.class)
+//    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e){
+//        var status = HttpStatus.NOT_FOUND.value();
+//        LoggerFactory.getLogger(NullPointerException.class).error(e.getMessage(), e);
+//        return ResponseEntity.status(status).body(new ErrorResponse(status, "Internal Server Error", ""));
+//    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<String> handleFileNotFoundException(FileNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("File Not Found: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<String> handleSecurityException(SecurityException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body("Security Error: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Error: " + ex.getMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(Exception ex) {
