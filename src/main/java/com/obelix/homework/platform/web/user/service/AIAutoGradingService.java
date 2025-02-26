@@ -13,7 +13,7 @@ public class AIAutoGradingService {
             return 2.00;
         }
 
-        String aiGrade = aiGradingService.gradeSubmissionWithAI(submissionText);
+        String aiGrade = String.valueOf(aiGradingService.gradeSubmissionWithAI(submissionText));
         double numericGrade = parseBulgarianGrade(aiGrade);
 
         if (numericGrade != 0.0) {

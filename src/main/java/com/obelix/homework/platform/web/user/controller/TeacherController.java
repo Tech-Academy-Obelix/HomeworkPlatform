@@ -75,10 +75,9 @@ public class TeacherController {
     }
 
     @GetMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}/ai-grade")
-    public String suggestGradeWithAI(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId) {
+    public GradeDto suggestGradeWithAI(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId) {
         return aiGradingService.gradeSubmissionWithAI(
-                        teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId)
-                        .getSolution());
+                        teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId).getSolution());
     }
 
     @GetMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}/plagiarism-check")
