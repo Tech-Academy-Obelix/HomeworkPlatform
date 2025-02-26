@@ -1,7 +1,6 @@
 package com.obelix.homework.platform.web.user.controller;
 
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
-import com.obelix.homework.platform.model.domain.dto.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentStudentDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
 import com.obelix.homework.platform.model.domain.entity.Grade;
@@ -55,16 +54,10 @@ public class StudentController {
     public List<Grade> getGrades() {
         return studentService.getGrades();
     }
-    */
 
     @PostMapping("/assignments/ai-grade")
     public GradeDto submitForAIAssessment(@RequestBody Submission submittedHomeworkAssignmentDto) {
         return aiGradingService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getSolution());
-    }
-
-    @GetMapping("/uploadimage")
-    public String displayUploadForm() {
-        return "imageupload/index";
     }
 }
 
