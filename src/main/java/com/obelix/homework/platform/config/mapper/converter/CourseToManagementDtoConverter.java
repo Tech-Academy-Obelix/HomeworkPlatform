@@ -1,8 +1,7 @@
 package com.obelix.homework.platform.config.mapper.converter;
 
 import com.obelix.homework.platform.model.domain.dto.CourseDto;
-import com.obelix.homework.platform.model.domain.dto.SubjectDto;
-import com.obelix.homework.platform.model.domain.dto.SubjectInCourseDto;
+import com.obelix.homework.platform.model.domain.dto.subject.SubjectInCourseDto;
 import com.obelix.homework.platform.model.domain.entity.Course;
 import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.model.user.dto.UserDto;
@@ -17,34 +16,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public class CourseToDtoConverter implements Converter<Course, CourseDto> {
+public class CourseToManagementDtoConverter implements Converter<Course, CourseDto> {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public CourseDto convert(MappingContext<Course, CourseDto> mappingContext) {
         var source = mappingContext.getSource();
-        return CourseDto.builder()
-                .id(source.getId())
-                .name(source.getCourseName())
-                .subjects(getSubjectDtos(source.getSubjects(), source))
-                .students(getStudentDtos(source.getStudents()))
-                .build();
+        return new CourseDto(
+                source.getId(),
+                source.getName(),
+                getSubjectDtos(source.getSubjects(), source),
+                getStudentDtos(source.getStudents()),
+                null);
     }
 
     private List<SubjectInCourseDto> getSubjectDtos(List<Subject> subjects, Course course) {
         if (subjects == null || subjects.isEmpty()) return null;
         return subjects.stream().map(subject -> getSubjectDto(subject, course)).collect(Collectors.toList());
     }
-
-    /*
-    private List<SubjectDto> getSubjectDtos(List<Subject> subjects) {
-        if (subjects == null || subjects.isEmpty()) return null;
-        return subjects.stream()
-                .map(subject -> modelMapper.map(subject, SubjectDto.class))
-                .collect(Collectors.toList());
-    }
-
-     */
 
     private SubjectInCourseDto getSubjectDto(Subject subject, Course course) {
         var subjectDto = modelMapper.map(subject, SubjectInCourseDto.class);
@@ -63,7 +52,7 @@ public class CourseToDtoConverter implements Converter<Course, CourseDto> {
     }
 
     @PostConstruct
-    protected void init() {
+    private void init() {
         modelMapper.addConverter(new SubjectToDtoConverter());
     }
 }

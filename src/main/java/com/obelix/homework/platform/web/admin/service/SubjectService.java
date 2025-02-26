@@ -1,6 +1,7 @@
 package com.obelix.homework.platform.web.admin.service;
 
-import com.obelix.homework.platform.model.domain.dto.SubjectDto;
+import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
+import com.obelix.homework.platform.model.domain.dto.subject.SubjectManagementDto;
 import com.obelix.homework.platform.model.domain.entity.Subject;
 import com.obelix.homework.platform.repo.domain.SubjectRepo;
 import jakarta.transaction.Transactional;
@@ -19,21 +20,23 @@ public class SubjectService {
     private final SubjectRepo subjectRepo;
     private final ModelMapper modelMapper;
 
-    public List<SubjectDto> getAllSubjects() {
+    public List<SubjectManagementDto> getAllSubjects() {
         return subjectRepo.findAll().stream()
-                .map(subject -> modelMapper.map(subject, SubjectDto.class))
+                .map(subject -> modelMapper.map(subject, SubjectManagementDto.class))
                 .collect(Collectors.toList());
     }
 
-    public SubjectDto getSubjectById(UUID id) {
-        return modelMapper.map(subjectRepo.getSubjectById(id), SubjectDto.class);
+    public SubjectManagementDto getSubjectById(UUID id) {
+        return modelMapper.map(
+                subjectRepo.findById(id).orElseThrow(() -> new SubjectNotFoundException(id.toString())),
+                SubjectManagementDto.class);
     }
 
-    public SubjectDto createSubject(String name){
-        return modelMapper.map(subjectRepo.save(new Subject(name)), SubjectDto.class);
+    public SubjectManagementDto createSubject(String name){
+        return modelMapper.map(subjectRepo.save(new Subject(name)), SubjectManagementDto.class);
     }
 
     public void deleteSubjectById(UUID id) {
-        subjectRepo.deleteSubjectById(id);
+        subjectRepo.deleteById(id);
     }
 }

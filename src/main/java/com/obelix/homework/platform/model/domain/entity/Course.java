@@ -1,6 +1,8 @@
 package com.obelix.homework.platform.model.domain.entity;
 
+import com.obelix.homework.platform.config.exception.SubjectHasAssignedTeacherException;
 import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
+import com.obelix.homework.platform.config.exception.UserNotFoundException;
 import com.obelix.homework.platform.model.user.entity.Student;
 import com.obelix.homework.platform.model.user.entity.Teacher;
 import jakarta.persistence.*;
@@ -19,30 +21,39 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private String courseName;
+    private String name;
 
-    @OneToMany
-    private List<Student> students;
-
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Subject> subjects;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Student> students;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private Map<Subject, Teacher> subjectTeachers;
 
-    @OneToMany
-    private List<HomeworkAssignment> assignments;
-
-    public Course(String courseName) {
-        this.courseName = courseName;
+    public Course(String name) {
+        this.name = name;
     }
 
-    public double getAverageGrade() {
+    public Double getAverageGrade() {
         double sum = 0;
         for (Student student : students) {
-            sum += student.getAverageGrade();
+            var grade = student.getAverageGrade();
+            sum += grade == null ? 0 : grade;
         }
         return sum / students.size();
+    }
+
+    public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignmentsBySubjectId(UUID subjectId) {
+        return students.stream()
+                .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()
+                        .filter(assignment -> assignment.getSubject().getId().equals(subjectId)))
+                .collect(Collectors.toList());
+    }
+
+    public void assignAssignmentToSubjectById(UUID subjectId, HomeworkAssignment assignment) {
+        getSubjectById(subjectId).addAssignment(assignment);
     }
 
     public Subject getSubjectById(UUID subjectId) {
@@ -52,8 +63,55 @@ public class Course {
     }
 
     public void removeSubjectById(UUID subjectId) {
-        subjects.remove(subjects.stream().filter(subject -> subject.getId().equals(subjectId))
+        subjects.removeIf(subject -> subject.getId().equals(subjectId));
+    }
+
+    public void addTeacherToSubject(Teacher teacher, UUID subjectId) {
+        var subject = getSubjectById(subjectId);
+        throwIfTeacherAssigned(subject);
+        teacher.getCourses().add(this);
+        subjectTeachers.put(subject, teacher);
+        subject.addTeacher(teacher);
+    }
+
+    public void removeTeacherFromSubject(UUID teacherId, UUID subjectId) {
+        var subject = getSubjectById(subjectId);
+        var teacher = getTeacherById(teacherId);
+        subjectTeachers.remove(subject);
+        subject.removeTeacher(teacher);
+        if (!subjectTeachers.containsValue(teacher)) {
+            teacher.getCourses().remove(this);
+        }
+    }
+
+    public void addStudent(Student student) {
+        students.add(student);
+        student.setCourse(this);
+    }
+
+    public void removeStudentById(UUID studentId) {
+        var student = getStudentById(studentId);
+        students.remove(student);
+        student.setCourse(null);
+    }
+
+    private Student getStudentById(UUID studentId) {
+        return students.stream()
+                .filter(student -> student.getId().equals(studentId))
                 .findFirst()
-                .orElseThrow(() -> new SubjectNotFoundException(subjectId.toString())));
+                .orElseThrow(() -> new UserNotFoundException(studentId.toString()));
+    }
+
+    private Teacher getTeacherById(UUID teacherId) {
+        return subjectTeachers.values().stream()
+                .filter(teacher -> teacher.getId().equals(teacherId))
+                .findFirst()
+                .orElseThrow(() -> new UserNotFoundException(teacherId.toString()));
+    }
+
+    private void throwIfTeacherAssigned(Subject subject) {
+        if (subjectTeachers.containsKey(subject)) {
+            throw new SubjectHasAssignedTeacherException(subject.getId().toString());
+        }
     }
 }

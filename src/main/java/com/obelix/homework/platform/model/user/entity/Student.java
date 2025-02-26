@@ -7,13 +7,17 @@ import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignm
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Student extends User {
     @OneToOne
@@ -25,7 +29,8 @@ public class Student extends User {
     @OneToMany
     private List<SubmittedHomeworkAssignment> submittedHomeworkAssignments;
 
-    public double getAverageGrade() {
+    public Double getAverageGrade() {
+        if (grades == null) return null;
         double sum = 0;
         for (Grade grade : grades) {
             sum += grade.getGrade();
@@ -34,7 +39,10 @@ public class Student extends User {
     }
 
     public List<HomeworkAssignment> getHomeworkAssignments() {
-        return course.getAssignments();
+        if (course == null) return null;
+        return course.getSubjects().stream()
+                .flatMap(subject -> subject.getAssignments().stream()) // Flatten the stream
+                .collect(Collectors.toList()); // Collect into a single list
     }
 
     public Student(User user) {

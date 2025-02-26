@@ -2,7 +2,7 @@
 
 ### !!!Every endpoint except /login and /register require the user to be authenticated with credentials and JWT token!!!
 
-### Authentication
+## Authentication
 - /login (GET) - Page for login panel
 - /login (POST)
   Expects username and password and returns a JWT token
@@ -24,18 +24,43 @@
 	}
   ```
 
-### Admin
+## Admin
+### User Management
+- /admin/users (GET) - Displays all of the users. Returns a UserDto list. It contains id, username, firstname, lastname, role
+- /admin/users/id (PUT) - Changes the role of that user. Expects a String (so no key and no quotation marks):
+  ```
+		role // can be either student, teacher, admin
+  ```
+- /admin/users/id (DELETE) - Deletes user with that id
+  
+### Invitation Codes
 - /admin (GET) - The default url an authenticated admin is redirect to
+- /admin/invite-code (GET) - Displays all invitation codes. Returns an InviteCode list. It contains id, email
 - /admin/invite-code (POST) - Page for creating an invitation code, used for user creation
   Expects an invitation code dto:
-  ```json
+  ```
 	{
-		"roleName": enum("student", "teacher", "admin"),
-		"associatedEmail": email
+		"role": role, // can be "student", "teacher" or "admin"
+		"email": email
 	}
   ```
+- admin/invite-code/id (DELETE) - Deletes invitation code with that id
 
-### Student:
+### Subjects
+- /admin/subjects (GET) - Displays all subjects. Returns a list of SubjectDto
+- /admin/subjects/id (GET) - Get subject by id
+- /admin/subjects (POST) - Create a new subject. Expects a String with the name (Again, no keys or quoation marks!!!):
+  ```
+  	name
+  ```
+- /admin/subjects/id (DELETE) - Deletes the subject by id
+
+### Courses
+- /admin/courses (GET) - Displays all of the courses. Returns list of CourseDto. Contains id, name, SubjectInCourseDto (contains id, name, userDto of its teacher)
+  , list of UserDtos of the students inside the course and a list of
+  HomeworkAssignmentCreateDtos (contains id, name, description, SubjectDto of the subject the homework is assigned to, the date assigned and the date due)
+
+## Student:
 - /student (GET) - The default url an authenticated student is redirected to
 - /student/assignments (GET) - Page for all assigned homework assignments
 - /student/assignments/id (GET) - Returns only the assignment with the specified id
@@ -60,7 +85,7 @@
 - /student/submitted-assignments/id (GET) - Returns only the submitted assignment with the specified id
 - /student/grades (GET) - Page for the grades of the student
 
-# Teacher
+## Teacher
 - /teachers/assignments (POST) - Submitting assignments Expects an assignment dto:
   ```json
 		{

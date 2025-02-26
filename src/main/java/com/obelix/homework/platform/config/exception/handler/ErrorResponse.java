@@ -1,7 +1,5 @@
 package com.obelix.homework.platform.config.exception.handler;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

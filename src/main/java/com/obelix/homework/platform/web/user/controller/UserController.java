@@ -1,24 +1,29 @@
 package com.obelix.homework.platform.web.user.controller;
 
+import com.obelix.homework.platform.model.user.dto.UserDto;
 import com.obelix.homework.platform.web.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
 @RestController
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
-
+    private final ModelMapper modelMapper;
 //    @GetMapping("/exists/{username}")
 //    public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
 //        return ResponseEntity.ok(userService.existsByUsername(username));
 //    }
+
+    @GetMapping
+    public ResponseEntity<UserDto> getUser() {
+        return ResponseEntity.ok().body(modelMapper.map(userService.getLoggedInUser(), UserDto.class));
+    }
 
     @PostMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody Map<String, String> payload) {

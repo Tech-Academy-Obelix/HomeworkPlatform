@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.4.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>com.obelix</groupId>
     <artifactId>homework.platform</artifactId>
@@ -92,15 +92,6 @@
             <artifactId>modelmapper</artifactId>
             <version>3.2.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -131,5 +122,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

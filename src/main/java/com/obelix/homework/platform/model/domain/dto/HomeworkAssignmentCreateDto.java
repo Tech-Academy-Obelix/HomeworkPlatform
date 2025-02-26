@@ -4,15 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Getter
 @Builder
 public class HomeworkAssignmentCreateDto {
-    private String assignmentName;
-    private String assignmentDescription;
-
+    private String name;
+    private String description;
     private Date dueDate;
-    private UUID subjectId;
-
 }

@@ -27,7 +27,7 @@ public class StudentService {
     public List<HomeworkAssignment> getAssignments() {
         return student.getHomeworkAssignments();
     }
-
+/*
     public HomeworkAssignment getAssignment(UUID id) {
         return student.getCourse().getAssignments().stream()
                 .filter(assignment -> assignment.getId().equals(id))
@@ -44,8 +44,8 @@ public class StudentService {
     public List<SubmittedHomeworkAssignment> submitBulkAssignments(List<SubmittedHomeworkAssignmentDto> submittedHomeworkAssignmentDtos) {
         return submittedHomeworkAssignmentRepo.saveAll(
                 submittedHomeworkAssignmentDtos.stream()
-                .map(this::submitAssignment) // For each DTO, call submitAssignment and map to a Saved Assignment
-                .collect(Collectors.toList())); // Collect the results into a List
+                .map(this::submitAssignment)
+                .collect(Collectors.toList()));
     }
 
     public List<SubmittedHomeworkAssignment> getSubmittedAssignments() {
@@ -68,5 +68,5 @@ public class StudentService {
         student = (Student) userService.getLoggedInUser();
     }
 
-
+ */
 }
