@@ -1,12 +1,14 @@
-package com.obelix.homework.platform.model.domain.dto;
+package com.obelix.homework.platform.model.domain.dto.assignment;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
 public class HomeworkAssignmentCreateDto {
     private String name;
     private String description;

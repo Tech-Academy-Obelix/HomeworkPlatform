@@ -1,6 +1,5 @@
 package com.obelix.homework.platform.model.domain.dto.subject;
 
-import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentResponseDto;
 import com.obelix.homework.platform.model.user.dto.UserDto;
 import lombok.*;
 
@@ -13,8 +12,8 @@ import java.util.UUID;
 public class SubjectManagementDto extends SubjectDto {
     private List<UserDto> teachers;
 
-    public SubjectManagementDto(UUID id, String name, List<HomeworkAssignmentResponseDto> assignments, List<UserDto> teachers) {
-        super(id, name, assignments);
+    public SubjectManagementDto(UUID id, String name, List<UserDto> teachers) {
+        super(id, name);
         this.teachers = teachers;
     }
 }

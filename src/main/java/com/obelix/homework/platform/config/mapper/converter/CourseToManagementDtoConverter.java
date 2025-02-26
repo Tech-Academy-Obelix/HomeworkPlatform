@@ -26,8 +26,7 @@ public class CourseToManagementDtoConverter implements Converter<Course, CourseD
                 source.getId(),
                 source.getName(),
                 getSubjectDtos(source.getSubjects(), source),
-                getStudentDtos(source.getStudents()),
-                null);
+                getStudentDtos(source.getStudents()));
     }
 
     private List<SubjectInCourseDto> getSubjectDtos(List<Subject> subjects, Course course) {

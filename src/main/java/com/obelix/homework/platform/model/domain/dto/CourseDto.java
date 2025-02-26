@@ -18,5 +18,4 @@ public class CourseDto {
     private String name;
     private List<SubjectInCourseDto> subjects;
     private List<UserDto> students;
-    private List<HomeworkAssignmentResponseDto> assignments;
 }

@@ -2,14 +2,13 @@ package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
-import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentCreateDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentCreateDto;
 import com.obelix.homework.platform.model.domain.dto.CourseDto;
-import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentResponseDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentResponseDto;
 import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
 import com.obelix.homework.platform.model.domain.entity.*;
 import com.obelix.homework.platform.model.user.entity.Teacher;
 import com.obelix.homework.platform.repo.domain.*;
-import com.obelix.homework.platform.repo.user.UserRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -24,10 +23,10 @@ import java.util.stream.Collectors;
 public class TeacherService {
     private final ModelMapper modelMapper;
     private final SubmittedHomeworkAssignmentRepo submittedHomeworkAssignmentRepo;
-    private final HomeworkAssignmentRepo homeworkAssignmentRepo;
     private final GradeRepo gradeRepo;
     private final UserService userService;
-    private final UserRepo userRepo;
+    private final CourseRepo courseRepo;
+    private final HomeworkAssignmentRepo homeworkAssignmentRepo;
 
     public List<CourseDto> getCourses() {
         return teacher().getCourses().stream()
@@ -47,63 +46,59 @@ public class TeacherService {
                 .collect(Collectors.toList());
     }
 
-    public HomeworkAssignmentResponseDto createAssignment(HomeworkAssignmentCreateDto dto) {
-        var teacher = teacher();
-        var assignment = modelMapper.map(dto, HomeworkAssignment.class);
-        teacher.addAssignment(homeworkAssignmentRepo.save(assignment));
-        userRepo.save(teacher);
-        return modelMapper.map(assignment, HomeworkAssignmentResponseDto.class);
-    }
-
-    public List<HomeworkAssignmentResponseDto> getAssignments() {
-        return teacher().getAssignments().stream()
+    public List<HomeworkAssignmentResponseDto> getAssignments(UUID courseId, UUID subjectId) {
+        return teacher().getCourseById(courseId).getAssignmentsInSubject(subjectId).stream()
                 .map(assignmentDto -> modelMapper.map(assignmentDto, HomeworkAssignmentResponseDto.class))
                 .collect(Collectors.toList());
     }
 
-    public HomeworkAssignmentResponseDto getAssignmentById(UUID id) {
-        return modelMapper.map(teacher().getAssignmentById(id), HomeworkAssignmentResponseDto.class);
+    public HomeworkAssignmentResponseDto getAssignmentById(UUID courseId, UUID subjectId, UUID assignmentId) {
+        return getAssignments(courseId, subjectId).stream()
+                .filter(assignment -> assignment.getId().equals(assignmentId))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
     }
 
-    public void deleteAssignmentById(UUID id) {
-        var teacher = teacher();
-        teacher.removeAssignmentById(id);
-        userRepo.save(teacher);
+    public HomeworkAssignmentResponseDto createAssignment(UUID courseId, UUID subjectId, HomeworkAssignmentCreateDto dto) {
+        var course = teacher().getCourseById(courseId);
+        var assignment = modelMapper.map(dto, HomeworkAssignment.class);
+        homeworkAssignmentRepo.save(assignment);
+        course.addAssignmentToSubject(assignment, subjectId);
+        courseRepo.save(course);
+        return modelMapper.map(assignment, HomeworkAssignmentResponseDto.class);
     }
 
-    public SubjectDto assignAssignmentToSubjectInCourse(UUID courseId, UUID subjectId, UUID assignmentId) {
-        var teacher = teacher();
-        var course = teacher.getCourseById(courseId);
-        course.assignAssignmentToSubjectById(subjectId, teacher.getAssignmentById(assignmentId));
-        userRepo.save(teacher);
-        return modelMapper.map(course.getSubjectById(subjectId), SubjectDto.class);
+    public void deleteAssignment(UUID courseId, UUID assignmentId) {
+        var course = teacher().getCourseById(courseId);
+        course.removeAssignmentById(assignmentId);
+        courseRepo.save(course);
+        homeworkAssignmentRepo.deleteById(assignmentId);
     }
 
-    public List<SubmittedHomeworkAssignment> getSubmittedAssignmentsInCourseBySubjectId(UUID courseId, UUID subjectId) {
+    public List<Submission> getSubmittedAssignmentsInCourseBySubjectId(UUID courseId, UUID subjectId) {
             return teacher().getCourseById(courseId).getSubmittedHomeworkAssignmentsBySubjectId(subjectId);
         }
 
-    public SubmittedHomeworkAssignment getSubmittedAssignmentInCourseInSubjectById(UUID courseId, UUID subjectId, UUID assignmentId) {
+    public Submission getSubmittedAssignmentInCourseInSubjectById(UUID courseId, UUID subjectId, UUID assignmentId) {
         return getSubmittedAssignmentsInCourseBySubjectId(courseId, subjectId).stream()
                 .filter(assignment -> assignment.getId().equals(assignmentId))
                 .findFirst()
                 .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
     }
 
-    public SubmittedHomeworkAssignment gradeSubmittedAssignment(UUID courseId, UUID subjectId, UUID assignmentId, GradeDto gradeDto) {
+    public Submission gradeSubmittedAssignment(UUID courseId, UUID subjectId, UUID assignmentId, GradeDto gradeDto) {
         var assignment = getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId);
         assignment.setGrade(gradeRepo.save(buildGrade(assignment)));
         assignment.setTeacherComment(gradeDto.getTeacherComment());
         return submittedHomeworkAssignmentRepo.save(assignment);
     }
 
-    private Grade buildGrade(SubmittedHomeworkAssignment assignment){
+    private Grade buildGrade(Submission assignment){
         return Grade.builder()
                 .grade(0)
                 .timestamp(new Date())
                 .student(assignment.getStudent())
                 .teacher(teacher())
-                .subject(assignment.getSubject())
                 .build();
     }
 

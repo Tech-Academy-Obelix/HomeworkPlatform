@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.parameters.P;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,30 +25,12 @@ public class Subject {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Teacher> teachers;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<HomeworkAssignment> assignments;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable
     private Map<Teacher, Integer> coursesPerTeacher;
 
     public Subject(String subjectName) {
         this.subjectName = subjectName;
-    }
-
-    public HomeworkAssignment getAssignmentById(UUID assignmentId) {
-        return assignments.stream()
-                .filter(assignment -> assignment.getId().equals(assignmentId))
-                .findFirst()
-                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
-    }
-
-    public void addAssignment(HomeworkAssignment assignment) {
-        assignments.add(assignment);
-    }
-
-    public void removeAssignmentById(UUID assignmentId) {
-        assignments.remove(getAssignmentById(assignmentId));
     }
 
     public void addTeacher(Teacher teacher) {

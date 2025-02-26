@@ -1,8 +1,10 @@
 package com.obelix.homework.platform.web.user.controller;
 
 import com.obelix.homework.platform.model.domain.dto.*;
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentCreateDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentResponseDto;
 import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
-import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
+import com.obelix.homework.platform.model.domain.entity.Submission;
 import com.obelix.homework.platform.web.user.service.AIGradingService;
 import com.obelix.homework.platform.web.user.service.PlagiarismDetectionService;
 import com.obelix.homework.platform.web.user.service.TeacherService;
@@ -35,49 +37,46 @@ public class TeacherController {
         return teacherService.getAllSubjectsInCourse(id);
     }
 
-    @GetMapping("/assignments")
-    public List<HomeworkAssignmentResponseDto> getHomeworkAssignments() {
-        return teacherService.getAssignments();
+    @GetMapping("/courses/{courseId}/subjects/{subjectId}/assignments")
+    public List<HomeworkAssignmentResponseDto> getAssignmentsInSubjectInCourse(@PathVariable UUID courseId, @PathVariable UUID subjectId){
+        return teacherService.getAssignments(courseId, subjectId);
     }
 
-    @GetMapping("/assignments/{id}")
-    public HomeworkAssignmentResponseDto getAssignment(@PathVariable UUID id) {
-        return teacherService.getAssignmentById(id);
+    @GetMapping("/courses/{courseId}/subjects/{subjectId}/assignments/{assignmentId}")
+    public HomeworkAssignmentResponseDto getAssignmentsInSubjectInCourse(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId){
+        return teacherService.getAssignmentById(courseId, subjectId, assignmentId);
     }
 
-    @PostMapping("/assignments")
-    public HomeworkAssignmentResponseDto createAssignment(@RequestBody HomeworkAssignmentCreateDto assignment) {
-        return teacherService.createAssignment(assignment);
+    @PostMapping("/courses/{courseId}/subjects/{subjectId}/assignments")
+    public HomeworkAssignmentResponseDto assignAssignmentToCourse(@PathVariable UUID courseId, @PathVariable UUID subjectId, @RequestBody HomeworkAssignmentCreateDto dto) {
+        return teacherService.createAssignment(courseId, subjectId, dto);
     }
 
-    @DeleteMapping("/assignments/{id}")
-    public void deleteAssignment(@PathVariable UUID id) {
-        teacherService.deleteAssignmentById(id);
+    @DeleteMapping("/courses/{courseId}/assignments/{assignmentId}")
+    public void deleteAssignment(@PathVariable UUID courseId, @PathVariable UUID assignmentId){
+        teacherService.deleteAssignment(courseId, assignmentId);
     }
 
-    @PostMapping("/course/{courseId}/subject/{subjectId}/assignment")
-    public SubjectDto assignAssignmentToCourse(@PathVariable UUID courseId, @PathVariable UUID subjectId, @RequestBody UUID assignmentId) {
-        return teacherService.assignAssignmentToSubjectInCourse(courseId, subjectId, assignmentId);
-    }
-
-    @GetMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments")
-    public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId) {
+    @GetMapping("/courses/{courseId}/subjects/{subjectId}/submitted-assignments")
+    public List<Submission> getSubmittedHomeworkAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId) {
         return teacherService.getSubmittedAssignmentsInCourseBySubjectId(courseId, subjectId);
     }
 
-    @GetMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}")
-    public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId) {
+    @GetMapping("/courses/{courseId}/subjects/{subjectId}/submitted-assignments/{assignmentId}")
+    public Submission getSubmittedAssignment(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId) {
         return teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId);
     }
     @PostMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}")
-    public SubmittedHomeworkAssignment gradeSubmittedAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId, @RequestBody GradeDto grade){
+    public Submission gradeSubmittedAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId, @RequestBody GradeDto grade){
         return teacherService.gradeSubmittedAssignment(courseId, subjectId, assignmentId, grade);
     }
+
 
     @GetMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}/ai-grade")
     public GradeDto suggestGradeWithAI(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId) {
         return aiGradingService.gradeSubmissionWithAI(
-                        teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId).getSolution());
+                        teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId)
+                        .getSolution());
     }
 
     @GetMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}/plagiarism-check")

@@ -12,6 +12,6 @@ public class InviteCodeDto {
     String role;
 
     @NotBlank
-    @Email(message = "invalid email")
+    @Email(message = "Invalid email")
     String email;
 }

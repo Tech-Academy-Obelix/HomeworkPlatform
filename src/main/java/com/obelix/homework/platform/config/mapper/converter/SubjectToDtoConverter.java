@@ -19,7 +19,7 @@ public class SubjectToDtoConverter implements Converter<Subject, SubjectManageme
     @Override
     public SubjectManagementDto convert(MappingContext<Subject, SubjectManagementDto> mappingContext) {
         var source = mappingContext.getSource();
-        return new SubjectManagementDto(source.getId(), source.getSubjectName(), null, getTeacherDtos(source.getTeachers()));
+        return new SubjectManagementDto(source.getId(), source.getSubjectName(), getTeacherDtos(source.getTeachers()));
     }
 
     private List<UserDto> getTeacherDtos(List<Teacher> teachers) {

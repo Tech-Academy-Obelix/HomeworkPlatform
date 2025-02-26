@@ -1,15 +1,13 @@
 package com.obelix.homework.platform.config.mapper.converter;
 
-import com.obelix.homework.platform.model.domain.dto.HomeworkAssignmentCreateDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentCreateDto;
 import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
-import com.obelix.homework.platform.repo.domain.SubjectRepo;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.Converter;
 import org.modelmapper.spi.MappingContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

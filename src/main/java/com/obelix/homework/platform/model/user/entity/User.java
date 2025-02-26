@@ -2,6 +2,8 @@ package com.obelix.homework.platform.model.user.entity;
 
 import com.obelix.homework.platform.config.security.role.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,9 +25,11 @@ public class User implements UserDetails {
     private UUID id;
     private String username;
     private String password;
-    private String email;
     private String firstName;
     private String lastName;
+
+    @Email(message = "Invalid email")
+    private String email;
 
     @Enumerated(EnumType.STRING)
     private Role role;

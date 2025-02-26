@@ -1,6 +1,7 @@
 package com.obelix.homework.platform.web.user.service;
 
-import com.obelix.homework.platform.model.domain.entity.SubmittedHomeworkAssignment;
+import com.obelix.homework.platform.model.domain.entity.Submission;
+import com.obelix.homework.platform.repo.domain.SubmittedHomeworkAssignmentRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -15,13 +16,17 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class PlagiarismDetectionService {
+    private final SubmittedHomeworkAssignmentRepo submittedHomeworkAssignmentRepo;
+    public double checkPlagiarism(Submission submittedAssignment) {
+        var newSubmission = submittedAssignment.getSolution();
+        if (newSubmission == null || newSubmission.trim().isEmpty()) {
 
     @Value("${openai.api.key}")
     private String apiKey;
 
     private final String API_URL = "https://api.openai.com/v1/chat/completions";
 
-    public double checkPlagiarism(SubmittedHomeworkAssignment submittedAssignment) {
+    public double checkPlagiarism(Submission submittedAssignment) {
         String submissionText = submittedAssignment.getSolution();
         if (submissionText == null || submissionText.trim().isEmpty()) {
             return 0.0;
@@ -34,6 +39,12 @@ public class PlagiarismDetectionService {
     private String checkWithAI(String submissionText) {
         RestTemplate restTemplate = new RestTemplate();
 
+    private List<String> existingSubmissions(UUID assignmentId) {
+        return submittedHomeworkAssignmentRepo.findAll().stream()
+                .filter(s -> !s.getId().equals(assignmentId))
+                .map(Submission::getSolution)
+                .collect(Collectors.toList());
+    }
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiKey);
         headers.set("Content-Type", "application/json");
@@ -65,3 +76,4 @@ public class PlagiarismDetectionService {
         }
     }
 }
+

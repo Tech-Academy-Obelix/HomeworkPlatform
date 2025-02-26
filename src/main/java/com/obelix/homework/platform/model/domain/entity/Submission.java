@@ -1,25 +1,30 @@
 package com.obelix.homework.platform.model.domain.entity;
 
-import com.obelix.homework.platform.model.domain.dto.SubmittedHomeworkAssignmentDto;
 import com.obelix.homework.platform.model.user.entity.Student;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
+public class Submission {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-public class SubmittedHomeworkAssignment extends HomeworkAssignment {
     private String solution;
     private Date timestamp;
 
     private String teacherComment;
+
+    @ManyToOne
+    private HomeworkAssignment homeworkAssignment;
 
     @OneToOne
     private Grade grade;
@@ -27,9 +32,9 @@ public class SubmittedHomeworkAssignment extends HomeworkAssignment {
     @OneToOne
     private Student student;
 
-    public SubmittedHomeworkAssignment(HomeworkAssignment homeworkAssignment, SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
-        super(homeworkAssignment);
-        this.solution = submittedHomeworkAssignmentDto.getSolution();
-        this.timestamp = Date.from(Instant.now());
+    public Submission(String solution, HomeworkAssignment homeworkAssignment) {
+        this.solution = solution;
+        this.timestamp = new Date();
+        this.homeworkAssignment = homeworkAssignment;
     }
 }

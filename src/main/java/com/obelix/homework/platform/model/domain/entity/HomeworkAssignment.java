@@ -1,5 +1,7 @@
 package com.obelix.homework.platform.model.domain.entity;
 
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentResponseDto;
+import com.obelix.homework.platform.model.domain.dto.subject.SubjectInCourseDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,16 +25,12 @@ public class HomeworkAssignment {
     private Date assignmentDate;
     private Date dueDate;
 
-    @ManyToOne
-    private Subject subject;
-
-    public HomeworkAssignment(HomeworkAssignment homeworkAssignment) {
+    public HomeworkAssignment(HomeworkAssignmentResponseDto homeworkAssignment) {
         id = UUID.randomUUID();
         name = homeworkAssignment.getName();
         description = homeworkAssignment.getDescription();
         assignmentDate = homeworkAssignment.getAssignmentDate();
         dueDate = homeworkAssignment.getDueDate();
-        subject = homeworkAssignment.getSubject();
     }
 
 }

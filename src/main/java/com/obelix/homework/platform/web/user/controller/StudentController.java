@@ -2,10 +2,17 @@ package com.obelix.homework.platform.web.user.controller;
 
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
 import com.obelix.homework.platform.model.domain.dto.SubmittedHomeworkAssignmentDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentStudentDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
+import com.obelix.homework.platform.model.domain.entity.Grade;
+import com.obelix.homework.platform.model.domain.entity.Submission;
 import com.obelix.homework.platform.web.user.service.StudentService;
 import com.obelix.homework.platform.web.user.service.AIGradingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/student")
@@ -13,34 +20,34 @@ import org.springframework.web.bind.annotation.*;
 public class StudentController {
     private final StudentService studentService;
     private final AIGradingService aiGradingService;
-/*
+
     @GetMapping("/assignments")
-    public List<HomeworkAssignment> getAssignments() {
-        return studentService.getAssignments();
+    public List<HomeworkAssignmentStudentDto> getAssignments() {
+        return studentService.getHomeworkAssignments();
     }
 
     @GetMapping("/assignments/{id}")
-    public HomeworkAssignment getAssignment(@PathVariable UUID id) {
-        return studentService.getAssignment(id);
+    public HomeworkAssignmentStudentDto getAssignment(@PathVariable UUID id) {
+        return studentService.getHomeworkAssignmentDtoById(id);
     }
 
-    @PostMapping("/assignments")
-    public SubmittedHomeworkAssignment submitAssignment(@RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
-        return studentService.submitAssignment(submittedHomeworkAssignmentDto);
+    @PostMapping("/assignments/{id}")
+    public Submission submitAssignment(@PathVariable UUID id, @RequestBody String solution) {
+        return studentService.submitAssignment(id, solution);
     }
 
     @PostMapping("/assignments/bulk")
-    public List<SubmittedHomeworkAssignment> submitBulkAssignments(@RequestBody List<SubmittedHomeworkAssignmentDto> submittedHomeworkAssignmentDtos) {
-        return studentService.submitBulkAssignments(submittedHomeworkAssignmentDtos);
+    public List<Submission> submitBulkAssignments(@RequestBody List<SubmissionDto> submissionDtos) {
+        return studentService.submitBulkAssignments(submissionDtos);
     }
 
     @GetMapping("/submitted-assignments")
-    public List<SubmittedHomeworkAssignment> getSubmittedAssignments() {
+    public List<Submission> getSubmittedAssignments() {
         return studentService.getSubmittedAssignments();
     }
 
     @GetMapping("/submitted-assignments/{id}")
-    public SubmittedHomeworkAssignment getSubmittedAssignment(@PathVariable UUID id) {
+    public Submission getSubmittedAssignment(@PathVariable UUID id) {
         return studentService.getSubmittedAssignment(id);
     }
 
@@ -51,7 +58,7 @@ public class StudentController {
     */
 
     @PostMapping("/assignments/ai-grade")
-    public GradeDto submitForAIAssessment(@RequestBody SubmittedHomeworkAssignmentDto submittedHomeworkAssignmentDto) {
+    public GradeDto submitForAIAssessment(@RequestBody Submission submittedHomeworkAssignmentDto) {
         return aiGradingService.gradeSubmissionWithAI(submittedHomeworkAssignmentDto.getSolution());
     }
 

@@ -1,5 +1,6 @@
 package com.obelix.homework.platform.model.domain.entity;
 
+import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
 import com.obelix.homework.platform.config.exception.SubjectHasAssignedTeacherException;
 import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
 import com.obelix.homework.platform.config.exception.UserNotFoundException;
@@ -32,6 +33,9 @@ public class Course {
     @ManyToMany(fetch = FetchType.EAGER)
     private Map<Subject, Teacher> subjectTeachers;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Map<HomeworkAssignment, Subject> assignmentSubjects;
+
     public Course(String name) {
         this.name = name;
     }
@@ -45,16 +49,13 @@ public class Course {
         return sum / students.size();
     }
 
-    public List<SubmittedHomeworkAssignment> getSubmittedHomeworkAssignmentsBySubjectId(UUID subjectId) {
+    public List<Submission> getSubmittedHomeworkAssignmentsBySubjectId(UUID subjectId) {
         return students.stream()
-                .flatMap(student -> student.getSubmittedHomeworkAssignments().stream()
-                        .filter(assignment -> assignment.getSubject().getId().equals(subjectId)))
-                .collect(Collectors.toList());
+                .flatMap(student -> student.getSubmissions().stream()  // Flatten the stream
+                        .filter(submission -> assignmentSubjects.get(submission.getHomeworkAssignment()).getId().equals(subjectId)))
+                .collect(Collectors.toList());  // Collect into a single list of submissions
     }
 
-    public void assignAssignmentToSubjectById(UUID subjectId, HomeworkAssignment assignment) {
-        getSubjectById(subjectId).addAssignment(assignment);
-    }
 
     public Subject getSubjectById(UUID subjectId) {
         return subjects.stream().filter(subject -> subject.getId().equals(subjectId))
@@ -113,5 +114,35 @@ public class Course {
         if (subjectTeachers.containsKey(subject)) {
             throw new SubjectHasAssignedTeacherException(subject.getId().toString());
         }
+    }
+
+    public HomeworkAssignment getAssignmentById(UUID assignmentId) {
+        return assignmentSubjects.keySet().stream()
+                .filter(assignment -> assignment.getId().equals(assignmentId))
+                .findFirst()
+                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
+    }
+
+    public void addAssignmentToSubject(HomeworkAssignment assignment, UUID subjectId) {
+        assignmentSubjects.put(assignment, getSubjectById(subjectId));
+    }
+
+    public void removeAssignmentById(UUID assignmentId) {
+        assignmentSubjects.remove(getAssignmentById(assignmentId));
+    }
+
+    public List<HomeworkAssignment> getAssignmentsInSubject(UUID subjectId) {
+        return assignmentSubjects.entrySet().stream()
+                .filter(entry -> entry.getValue().getId().equals(subjectId))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
+    public List<HomeworkAssignment> getAssignments() {
+        return assignmentSubjects.keySet().stream().toList();
+    }
+
+    public Subject getSubjectByAssignment(HomeworkAssignment assignment) {
+        return assignmentSubjects.get(assignment);
     }
 }
