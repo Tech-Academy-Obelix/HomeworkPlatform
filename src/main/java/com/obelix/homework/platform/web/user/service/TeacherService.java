@@ -5,8 +5,11 @@ import com.obelix.homework.platform.model.domain.dto.GradeDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentCreateDto;
 import com.obelix.homework.platform.model.domain.dto.CourseDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentResponseDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionTeacherDto;
 import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
 import com.obelix.homework.platform.model.domain.entity.*;
+import com.obelix.homework.platform.model.user.dto.StudentDto;
 import com.obelix.homework.platform.model.user.entity.Teacher;
 import com.obelix.homework.platform.repo.domain.*;
 import jakarta.transaction.Transactional;
@@ -75,31 +78,45 @@ public class TeacherService {
         homeworkAssignmentRepo.deleteById(assignmentId);
     }
 
-    public List<Submission> getSubmittedAssignmentsInCourseBySubjectId(UUID courseId, UUID subjectId) {
-            return teacher().getCourseById(courseId).getSubmittedHomeworkAssignmentsBySubjectId(subjectId);
-        }
+    public List<SubmissionDto> getSubmittedAssignmentsInCourseBySubjectId(UUID courseId, UUID subjectId) {
+        var course = teacher().getCourseById(courseId);
+        var submissions = course.getSubmittedHomeworkAssignmentsBySubjectId(subjectId);
+        return submissions.stream()
+                .map(submission -> getSubmissionDto(course, submission))
+                .collect(Collectors.toList());
+    }
 
-    public Submission getSubmittedAssignmentInCourseInSubjectById(UUID courseId, UUID subjectId, UUID assignmentId) {
+    public SubmissionDto getSubmittedAssignmentInCourseInSubjectById(UUID courseId, UUID subjectId, UUID assignmentId) {
         return getSubmittedAssignmentsInCourseBySubjectId(courseId, subjectId).stream()
-                .filter(assignment -> assignment.getId().equals(assignmentId))
+                .filter(submission -> submission.getHomeworkAssignment().getId().equals(assignmentId))
                 .findFirst()
                 .orElseThrow(() -> new AssignmentNotFoundException(assignmentId.toString()));
     }
 
-    public Submission gradeSubmittedAssignment(UUID courseId, UUID subjectId, UUID assignmentId, GradeDto gradeDto) {
-        var assignment = getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId);
-        assignment.setGrade(gradeRepo.save(buildGrade(assignment)));
-        assignment.setTeacherComment(gradeDto.getTeacherComment());
-        return submittedHomeworkAssignmentRepo.save(assignment);
+    public SubmissionDto gradeSubmittedAssignment(UUID courseId, UUID submissionId, GradeDto gradeDto) {
+        var course = teacher().getCourseById(courseId);
+        var submission = course.getSubmissionById(submissionId);
+        submission.setGrade(gradeRepo.save(buildGrade(submission)));
+        submission.setTeacherComment(gradeDto.getTeacherComment());
+        var dto = getSubmissionDto(course, submission);
+        submittedHomeworkAssignmentRepo.save(submission);
+        return dto;
     }
 
-    private Grade buildGrade(Submission assignment){
+    private Grade buildGrade(Submission assignment) {
         return Grade.builder()
                 .grade(0)
                 .timestamp(new Date())
                 .student(assignment.getStudent())
                 .teacher(teacher())
                 .build();
+    }
+
+    private SubmissionDto getSubmissionDto(Course course, Submission submission) {
+        var dto = modelMapper.map(submission, SubmissionTeacherDto.class);
+        var student = course.getStudentBySubmissionId(submission.getId());
+        dto.setStudent(modelMapper.map(student, StudentDto.class));
+        return dto;
     }
 
     private Teacher teacher() {

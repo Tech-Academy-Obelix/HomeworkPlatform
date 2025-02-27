@@ -87,7 +87,9 @@ public class CourseService {
 
     public CourseDto addTeacherToSubjectInCourse(UUID courseId, UUID subjectId, UUID teacherId) {
         var course = getCourseFromRepoById(courseId);
-        course.addTeacherToSubject(getTeacherFromRepoById(teacherId), subjectId);
+        var teacher = getTeacherFromRepoById(teacherId);
+        course.addTeacherToSubject(teacher, subjectId);
+        teacherRepo.save(teacher);
         return modelMapper.map(courseRepo.save(course), CourseDto.class);
     }
 

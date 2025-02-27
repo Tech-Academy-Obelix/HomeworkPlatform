@@ -10,6 +10,4 @@ public class GradeDto {
     private UUID id;
     private double grade;
     private String teacherComment;
-    private Double aiSuggestedGrade;
-    private String aiComment;
 }

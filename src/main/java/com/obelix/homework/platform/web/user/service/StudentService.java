@@ -1,13 +1,16 @@
 package com.obelix.homework.platform.web.user.service;
 
 import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
+import com.obelix.homework.platform.config.exception.SubmissionNotFoundException;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentStudentDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionInBulkCreateDto;
 import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
 import com.obelix.homework.platform.model.domain.entity.Grade;
 import com.obelix.homework.platform.model.domain.entity.HomeworkAssignment;
 import com.obelix.homework.platform.model.domain.entity.Submission;
 import com.obelix.homework.platform.model.user.entity.Student;
+import com.obelix.homework.platform.repo.domain.CourseRepo;
 import com.obelix.homework.platform.repo.domain.SubmittedHomeworkAssignmentRepo;
 import com.obelix.homework.platform.repo.user.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ public class StudentService {
     private final SubmittedHomeworkAssignmentRepo submittedHomeworkAssignmentRepo;
     private final UserRepo userRepo;
     private final ModelMapper modelMapper;
+    private final CourseRepo courseRepo;
 
     public List<HomeworkAssignmentStudentDto> getHomeworkAssignments() {
         return student().getHomeworkAssignments().stream()
@@ -39,29 +43,36 @@ public class StudentService {
                 .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
     }
 
-    public Submission submitAssignment(UUID id, String solution) {
+    public SubmissionDto submitAssignment(UUID id, String solution) {
         var student = student();
-        var submission = submittedHomeworkAssignmentRepo.save(new Submission(solution, getHomeworkAssignmentById(id)));
-        student.addSubmission(submission);
+        var assignment = getHomeworkAssignmentById(id);
+        var course = student.getCourse();
+        var submission = submittedHomeworkAssignmentRepo.save(new Submission(solution, assignment));
+        course.addSubmission(student.getId(), submission);
+        courseRepo.save(course);
+        var dto = modelMapper.map(submission, SubmissionDto.class);
+        dto.setHomeworkAssignment(getAssignmentDto(assignment));
         userRepo.save(student);
-        return submission;
+        return dto;
     }
 
-    public List<Submission> submitBulkAssignments(List<SubmissionDto> submissionDtos) {
+    public List<SubmissionDto> submitBulkAssignments(List<SubmissionInBulkCreateDto> submissionDtos) {
         return submissionDtos.stream()
                 .map(submissionDto -> submitAssignment(submissionDto.getId(), submissionDto.getSolution()))
                 .collect(Collectors.toList());
     }
 
-    public List<Submission> getSubmittedAssignments() {
-        return student().getSubmissions();
+    public List<SubmissionDto> getSubmittedAssignments() {
+        return student().getSubmissions().stream()
+                .map(submission -> modelMapper.map(submission, SubmissionDto.class))
+                .collect(Collectors.toList());
     }
 
-    public Submission getSubmittedAssignment(UUID id) {
-        return student().getSubmissions().stream()
-                .filter(assignment -> assignment.getId().equals(id))
+    public SubmissionDto getSubmittedAssignmentById(UUID id) {
+        return getSubmittedAssignments().stream()
+                .filter(submissionDto -> submissionDto.getId().equals(id))
                 .findFirst()
-                .orElseThrow(() -> new AssignmentNotFoundException(id.toString()));
+                .orElseThrow(() -> new SubmissionNotFoundException(id.toString()));
     }
 
     public List<Grade> getGrades() {

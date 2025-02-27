@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -69,14 +70,6 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(status, SubjectHasAssignedTeacherException.ERROR, ex.getMessage()));
     }
 
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException e) {
-        int status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-        LOGGER.error("NullPointerException: ", e);
-        return ResponseEntity.status(status)
-                .body(new ErrorResponse(status, "Internal Server Error", e.getMessage()));
-    }
-
     @ExceptionHandler(FileNotFoundException.class)
     public ResponseEntity<String> handleFileNotFoundException(FileNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -115,6 +108,24 @@ public class GlobalExceptionHandler {
         var status = HttpStatus.METHOD_NOT_ALLOWED.value();
         return ResponseEntity.status(status)
                 .body(new ErrorResponse(status, "Method Not Allowed", ex.getMessage()));
+    }
+
+    @ExceptionHandler(ResubmitionException.class)
+    public ResponseEntity<ErrorResponse> handleResubmitionException(ResubmitionException ex) {
+        var status = HttpStatus.CONFLICT.value();
+        return ResponseEntity.status(status).body(new ErrorResponse(status, ResubmitionException.ERROR, ex.getMessage()));
+    }
+
+    @ExceptionHandler(SubmissionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleSubmissionNotFoundException(SubmissionNotFoundException ex) {
+        var status = HttpStatus.NOT_FOUND.value();
+        return ResponseEntity.status(status).body(new ErrorResponse(status, SubmissionNotFoundException.ERROR, ex.getMessage()));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex) {
+        var status = HttpStatus.UNAUTHORIZED.value();
+        return ResponseEntity.status(status).body(new ErrorResponse(status, "Bad Credentials", ex.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)

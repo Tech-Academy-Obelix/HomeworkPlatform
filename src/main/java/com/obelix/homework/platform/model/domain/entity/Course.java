@@ -1,9 +1,6 @@
 package com.obelix.homework.platform.model.domain.entity;
 
-import com.obelix.homework.platform.config.exception.AssignmentNotFoundException;
-import com.obelix.homework.platform.config.exception.SubjectHasAssignedTeacherException;
-import com.obelix.homework.platform.config.exception.SubjectNotFoundException;
-import com.obelix.homework.platform.config.exception.UserNotFoundException;
+import com.obelix.homework.platform.config.exception.*;
 import com.obelix.homework.platform.model.user.entity.Student;
 import com.obelix.homework.platform.model.user.entity.Teacher;
 import jakarta.persistence.*;
@@ -36,6 +33,9 @@ public class Course {
     @ManyToMany(fetch = FetchType.EAGER)
     private Map<HomeworkAssignment, Subject> assignmentSubjects;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Map<Student, Submission> studentSubmissions;
+
     public Course(String name) {
         this.name = name;
     }
@@ -49,6 +49,16 @@ public class Course {
         return sum / students.size();
     }
 
+    public void addSubmission(UUID studentId, Submission submission) {
+        var student = getStudentById(studentId);
+        if (!studentSubmissions.containsKey(student)) {
+            student.addSubmission(submission);
+            studentSubmissions.put(student, submission);
+        }  else {
+            throw new ResubmitionException(submission.getHomeworkAssignment().id.toString());
+        }
+    }
+
     public List<Submission> getSubmittedHomeworkAssignmentsBySubjectId(UUID subjectId) {
         return students.stream()
                 .flatMap(student -> student.getSubmissions().stream()  // Flatten the stream
@@ -56,6 +66,13 @@ public class Course {
                 .collect(Collectors.toList());  // Collect into a single list of submissions
     }
 
+    public Student getStudentBySubmissionId(UUID submissionId) {
+        System.out.println("FUCK ALL OF THE NIGGERS");
+        return studentSubmissions.entrySet().stream().filter(entry -> entry.getValue().getId().equals(submissionId))
+                .findFirst()
+                .orElseThrow(() -> new SubmissionNotFoundException(submissionId.toString()))
+                .getKey();
+    }
 
     public Subject getSubjectById(UUID subjectId) {
         return subjects.stream().filter(subject -> subject.getId().equals(subjectId))
@@ -144,5 +161,11 @@ public class Course {
 
     public Subject getSubjectByAssignment(HomeworkAssignment assignment) {
         return assignmentSubjects.get(assignment);
+    }
+
+    public Submission getSubmissionById(UUID submissionId) {
+        return studentSubmissions.values().stream().filter(submission -> submission.getId().equals(submissionId))
+                .findFirst()
+                .orElseThrow(() -> new SubmissionNotFoundException(submissionId.toString()));
     }
 }
