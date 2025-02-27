@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/teacher/**").hasAnyAuthority(Role.ROLE_TEACHER.toString())
                         .requestMatchers("/admin/**").hasAnyAuthority(Role.ROLE_ADMIN.toString())
                         .requestMatchers("/user/**").hasAnyAuthority(Role.ROLE_ADMIN.toString(), Role.ROLE_STUDENT.toString(), Role.ROLE_TEACHER.toString())
+                        .requestMatchers("/api-docs", "/swagger-ui").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
