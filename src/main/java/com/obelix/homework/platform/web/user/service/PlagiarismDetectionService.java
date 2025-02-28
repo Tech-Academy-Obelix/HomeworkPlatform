@@ -1,6 +1,6 @@
 package com.obelix.homework.platform.web.user.service;
 
-import com.obelix.homework.platform.model.domain.entity.Submission;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -21,7 +21,7 @@ public class PlagiarismDetectionService {
 
     private final String API_URL = "https://api.openai.com/v1/chat/completions";
 
-    public double checkPlagiarism(Submission submittedAssignment) {
+    public double checkPlagiarism(SubmissionDto submittedAssignment) {
         String submissionText = submittedAssignment.getSolution();
         if (submissionText == null || submissionText.trim().isEmpty()) {
             return 0.0;

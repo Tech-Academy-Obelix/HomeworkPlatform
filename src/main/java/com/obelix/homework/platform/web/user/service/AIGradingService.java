@@ -49,12 +49,11 @@ public class AIGradingService {
 
             String[] responseParts = aiResponse.split(" - ", 2);
             Double grade = parseGrade(responseParts[0]);
-            String comment = responseParts.length > 1 ? responseParts[1] : "No comment provided.";
+            String comment = responseParts.length > 1 ? responseParts[1] : "No comment.";
 
             GradeDto gradeDto = new GradeDto();
-            gradeDto.setId(UUID.randomUUID());
-            gradeDto.setAiSuggestedGrade(grade);
-            gradeDto.setAiComment(comment);
+            gradeDto.setGrade(grade);
+            gradeDto.setTeacherComment(comment);
 
             return gradeDto;
 

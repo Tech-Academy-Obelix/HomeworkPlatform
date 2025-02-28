@@ -3,6 +3,7 @@ package com.obelix.homework.platform.web.user.controller;
 import com.obelix.homework.platform.model.domain.dto.*;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentCreateDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentResponseDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
 import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
 import com.obelix.homework.platform.model.domain.entity.Submission;
 import com.obelix.homework.platform.web.user.service.AIGradingService;
@@ -58,17 +59,17 @@ public class TeacherController {
     }
 
     @GetMapping("/courses/{courseId}/subjects/{subjectId}/submitted-assignments")
-    public List<Submission> getSubmittedHomeworkAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId) {
+    public List<SubmissionDto> getSubmittedHomeworkAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId) {
         return teacherService.getSubmittedAssignmentsInCourseBySubjectId(courseId, subjectId);
     }
 
-    @GetMapping("/courses/{courseId}/subjects/{subjectId}/submitted-assignments/{assignmentId}")
-    public Submission getSubmittedAssignment(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId) {
-        return teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, assignmentId);
+    @GetMapping("/courses/{courseId}/subjects/{subjectId}/submitted-assignments/{submissionId}")
+    public SubmissionDto getSubmittedAssignment(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID submissionId) {
+        return teacherService.getSubmittedAssignmentInCourseInSubjectById(courseId, subjectId, submissionId);
     }
-    @PostMapping("/course/{courseId}/subject/{subjectId}/submitted-assignments/{assignmentId}")
-    public Submission gradeSubmittedAssignments(@PathVariable UUID courseId, @PathVariable UUID subjectId, @PathVariable UUID assignmentId, @RequestBody GradeDto grade){
-        return teacherService.gradeSubmittedAssignment(courseId, subjectId, assignmentId, grade);
+    @PostMapping("/course/{courseId}/submitted-assignments/{submissionId}")
+    public SubmissionDto gradeSubmittedAssignments(@PathVariable UUID courseId, @PathVariable UUID submissionId, @RequestBody GradeDto grade){
+        return teacherService.gradeSubmittedAssignment(courseId, submissionId, grade);
     }
 
 

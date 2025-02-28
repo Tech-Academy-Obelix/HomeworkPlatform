@@ -3,6 +3,7 @@ package com.obelix.homework.platform.web.user.controller;
 import com.obelix.homework.platform.model.domain.dto.GradeDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.HomeworkAssignmentStudentDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
+import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionInBulkCreateDto;
 import com.obelix.homework.platform.model.domain.entity.Grade;
 import com.obelix.homework.platform.model.domain.entity.Submission;
 import com.obelix.homework.platform.web.user.service.StudentService;
@@ -31,23 +32,23 @@ public class StudentController {
     }
 
     @PostMapping("/assignments/{id}")
-    public Submission submitAssignment(@PathVariable UUID id, @RequestBody String solution) {
+    public SubmissionDto submitAssignment(@PathVariable UUID id, @RequestBody String solution) {
         return studentService.submitAssignment(id, solution);
     }
 
     @PostMapping("/assignments/bulk")
-    public List<Submission> submitBulkAssignments(@RequestBody List<SubmissionDto> submissionDtos) {
-        return studentService.submitBulkAssignments(submissionDtos);
+    public List<SubmissionDto> submitBulkAssignments(@RequestBody List<SubmissionInBulkCreateDto> submissionInBulkDtos) {
+        return studentService.submitBulkAssignments(submissionInBulkDtos);
     }
 
     @GetMapping("/submitted-assignments")
-    public List<Submission> getSubmittedAssignments() {
+    public List<SubmissionDto> getSubmittedAssignments() {
         return studentService.getSubmittedAssignments();
     }
 
     @GetMapping("/submitted-assignments/{id}")
-    public Submission getSubmittedAssignment(@PathVariable UUID id) {
-        return studentService.getSubmittedAssignment(id);
+    public SubmissionDto getSubmittedAssignment(@PathVariable UUID id) {
+        return studentService.getSubmittedAssignmentById(id);
     }
 
     @GetMapping("/grades")
