@@ -25,6 +25,8 @@ public class SubjectToDtoInTeacherConverter implements Converter<Subject, Subjec
     }
 
     private List<HomeworkAssignmentResponseDto> getAssignmentDtos(List<HomeworkAssignment> assignments) {
-        return assignments.stream().map(assignmentDto -> modelMapper.map(assignmentDto, HomeworkAssignmentResponseDto.class)).collect(Collectors.toList());
+        return assignments.stream()
+                .map(assignmentDto -> modelMapper.map(assignmentDto, HomeworkAssignmentResponseDto.class))
+                .collect(Collectors.toList());
     }
 }

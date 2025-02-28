@@ -17,6 +17,7 @@ public class ModelMapperConfig {
     private final CourseToManagementDtoConverter courseToManagementDtoConverter;
     private final StudentToDtoConverter studentToDtoConverter;
     private final TeacherToDtoConverter teacherToDtoConverter;
+    private final SubmissionToTeacherDtoConverter submissionToTeacherDtoConverter;
     @Bean
     public ModelMapper modelMapper() {
         modelMapper.addConverter(dtoToHomeworkAssignmentConverter);
@@ -25,6 +26,7 @@ public class ModelMapperConfig {
         modelMapper.addConverter(subjectToDtoConverter);
         modelMapper.addConverter(studentToDtoConverter);
         modelMapper.addConverter(teacherToDtoConverter);
+        modelMapper.addConverter(submissionToTeacherDtoConverter);
         return modelMapper;
     }
 }

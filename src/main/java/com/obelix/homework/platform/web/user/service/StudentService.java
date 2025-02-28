@@ -31,7 +31,7 @@ public class StudentService {
     private final CourseRepo courseRepo;
 
     public List<HomeworkAssignmentStudentDto> getHomeworkAssignments() {
-        return student().getHomeworkAssignments().stream()
+        return student().getCourse().getAssignments().stream()
                 .map(this::getAssignmentDto)
                 .collect(Collectors.toList());
     }

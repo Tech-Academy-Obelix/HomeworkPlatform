@@ -52,6 +52,7 @@ public class Course {
     public void addSubmission(UUID studentId, Submission submission) {
         var student = getStudentById(studentId);
         if (!studentSubmissions.containsKey(student)) {
+            submission.setStudent(student);
             student.addSubmission(submission);
             studentSubmissions.put(student, submission);
         }  else {
@@ -60,10 +61,14 @@ public class Course {
     }
 
     public List<Submission> getSubmittedHomeworkAssignmentsBySubjectId(UUID subjectId) {
-        return students.stream()
-                .flatMap(student -> student.getSubmissions().stream()  // Flatten the stream
-                        .filter(submission -> assignmentSubjects.get(submission.getHomeworkAssignment()).getId().equals(subjectId)))
-                .collect(Collectors.toList());  // Collect into a single list of submissions
+        return studentSubmissions.entrySet().stream()
+                .filter(entry -> assignmentSubjects.get(entry.getValue().getHomeworkAssignment()).getId().equals(subjectId))
+                .map(entry -> {
+                    var submission = entry.getValue();
+                    submission.setStudent(entry.getKey());
+                    return submission;
+                })
+                .toList();
     }
 
     public Student getStudentBySubmissionId(UUID submissionId) {

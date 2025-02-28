@@ -9,7 +9,6 @@ import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionDto;
 import com.obelix.homework.platform.model.domain.dto.assignment.SubmissionTeacherDto;
 import com.obelix.homework.platform.model.domain.dto.subject.SubjectDto;
 import com.obelix.homework.platform.model.domain.entity.*;
-import com.obelix.homework.platform.model.user.dto.StudentDto;
 import com.obelix.homework.platform.model.user.entity.Teacher;
 import com.obelix.homework.platform.repo.domain.*;
 import jakarta.transaction.Transactional;
@@ -82,7 +81,7 @@ public class TeacherService {
         var course = teacher().getCourseById(courseId);
         var submissions = course.getSubmittedHomeworkAssignmentsBySubjectId(subjectId);
         return submissions.stream()
-                .map(submission -> getSubmissionDto(course, submission))
+                .map(submission -> modelMapper.map(submission, SubmissionTeacherDto.class))
                 .collect(Collectors.toList());
     }
 
@@ -98,7 +97,7 @@ public class TeacherService {
         var submission = course.getSubmissionById(submissionId);
         submission.setGrade(gradeRepo.save(buildGrade(submission)));
         submission.setTeacherComment(gradeDto.getTeacherComment());
-        var dto = getSubmissionDto(course, submission);
+        var dto = modelMapper.map(submission, SubmissionTeacherDto.class);
         submittedHomeworkAssignmentRepo.save(submission);
         return dto;
     }
@@ -110,13 +109,6 @@ public class TeacherService {
                 .student(assignment.getStudent())
                 .teacher(teacher())
                 .build();
-    }
-
-    private SubmissionDto getSubmissionDto(Course course, Submission submission) {
-        var dto = modelMapper.map(submission, SubmissionTeacherDto.class);
-        var student = course.getStudentBySubmissionId(submission.getId());
-        dto.setStudent(modelMapper.map(student, StudentDto.class));
-        return dto;
     }
 
     private Teacher teacher() {
